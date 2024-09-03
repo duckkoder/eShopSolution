@@ -1,4 +1,6 @@
-﻿namespace eShopSolution.Data.Entities
+﻿using System.Drawing;
+
+namespace eShopSolution.Data.Entities
 {
 	public class Product
 	{
@@ -20,6 +22,8 @@
 		public List<Cart> Carts { get; set; }
 
 		public List<ProductTranslation> ProductTranslations { get; set; }
+
+		public List<ProductImage> productImages { get; set; }
 
 	}
 }
