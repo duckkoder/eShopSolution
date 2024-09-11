@@ -1,6 +1,8 @@
 ﻿using eShopSolution.Data.Configurations;
 using eShopSolution.Data.Entities;
 using eShopSolution.Data.Extensions;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +10,7 @@ using System.Text;
 
 namespace eShopSolution.Data.EF
 {
-	public class EShopDbContext : DbContext
+	public class EShopDbContext : IdentityDbContext<AppUser,AppRole,Guid>
 	{
 		public EShopDbContext(DbContextOptions options) : base(options)
 		{
@@ -31,8 +33,19 @@ namespace eShopSolution.Data.EF
 			modelBuilder.ApplyConfiguration(new ProductTranslationConfiguration());
 			modelBuilder.ApplyConfiguration(new PromotionConfiguration());
 			modelBuilder.ApplyConfiguration(new TransactionConfiguration());
+			modelBuilder.ApplyConfiguration(new ProductImageConfiguration());
+			//configure for IdentityContext (Authentication)
+			modelBuilder.ApplyConfiguration(new AppUserConfiguration());
+			modelBuilder.ApplyConfiguration(new AppRoleConfiguration());
 
+			modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
+			modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("AppUserRoles");
+			modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("AppUserLogin");
+			modelBuilder.Entity<IdentityRoleClaim<Guid>>().ToTable("AppRoleClaims");
+			modelBuilder.Entity<IdentityUserToken<Guid>>().ToTable("AppUserTokens");
 
+			// IdentityDbContext<TUser, TRole, TKey, IdentityUserClaim<TKey>,
+			// IdentityUserRole<TKey>, IdentityUserLogin<TKey>, IdentityRoleClaim<TKey>, IdentityUserToken<TKey>>
 			//Data Seeding 
 			modelBuilder.Seed();
 
@@ -62,7 +75,7 @@ namespace eShopSolution.Data.EF
 
 		public DbSet<Promotion> Promotions { get; set; }
 
-
+		public DbSet<ProductImage> ProductImages { get; set; }
 		public DbSet<Transaction> Transactions { get; set; }
 
 
