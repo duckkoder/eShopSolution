@@ -1,4 +1,5 @@
 using eShopSolution.Application.Catalog.Products;
+using eShopSolution.Application.Common;
 using eShopSolution.Data.EF;
 using eShopSolution.Utilities.Constants;
 using Microsoft.EntityFrameworkCore;
@@ -19,8 +20,12 @@ namespace eShopSolution.BackendApi
 
 
 
-
+			builder.Services.AddControllersWithViews();
+			builder.Services.AddTransient<IStorageService, FileStorageService>();
+			builder.Services.AddTransient<IManageProductService, ManageProductService>();
 			builder.Services.AddTransient<IPublicProductService, PublicProductService>();
+
+
 			builder.Services.AddSwaggerGen(c => {
 				c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Swagger eShopSolution", Version = "v1" });
 			});
