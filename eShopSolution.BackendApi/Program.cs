@@ -1,7 +1,10 @@
 using eShopSolution.Application.Catalog.Products;
 using eShopSolution.Application.Common;
+using eShopSolution.Application.System.Users;
 using eShopSolution.Data.EF;
+using eShopSolution.Data.Entities;
 using eShopSolution.Utilities.Constants;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Configuration;
 
@@ -20,13 +23,25 @@ namespace eShopSolution.BackendApi
 
 
 
+
 			builder.Services.AddControllersWithViews();
+
+			builder.Services.AddIdentity<AppUser, AppRole>()
+				.AddEntityFrameworkStores<EShopDbContext>()
+				.AddDefaultTokenProviders();
+
+			//Declare Dependency injection (DI) 
 			builder.Services.AddTransient<IStorageService, FileStorageService>();
 			builder.Services.AddTransient<IManageProductService, ManageProductService>();
 			builder.Services.AddTransient<IPublicProductService, PublicProductService>();
+			builder.Services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
+			builder.Services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
+			builder.Services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
+			builder.Services.AddTransient<IUserService, UserService>();
 
 
-			builder.Services.AddSwaggerGen(c => {
+			builder.Services.AddSwaggerGen(c =>
+			{
 				c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Swagger eShopSolution", Version = "v1" });
 			});
 
