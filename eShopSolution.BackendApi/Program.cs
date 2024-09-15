@@ -4,8 +4,11 @@ using eShopSolution.Application.System.Users;
 using eShopSolution.Data.EF;
 using eShopSolution.Data.Entities;
 using eShopSolution.Utilities.Constants;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Configuration;
 
 namespace eShopSolution.BackendApi
@@ -43,6 +46,55 @@ namespace eShopSolution.BackendApi
 			builder.Services.AddSwaggerGen(c =>
 			{
 				c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Swagger eShopSolution", Version = "v1" });
+				c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+				{
+					In = ParameterLocation.Header,
+					Description = "Please enter a valid token",
+					Name = "Authorization",
+					Type = SecuritySchemeType.Http,
+					BearerFormat = "JWT",
+					Scheme = "Bearer"
+				});
+				c.AddSecurityRequirement(new OpenApiSecurityRequirement
+					{
+						{
+							new OpenApiSecurityScheme
+							{
+								Reference = new OpenApiReference
+								{
+									Type=ReferenceType.SecurityScheme,
+									Id="Bearer"
+								}
+							},
+							new string[]{}
+						}
+					});
+			});
+
+			string issuer = builder.Configuration.GetValue<string>("Tokens:Issuer");
+			string signingKey = builder.Configuration.GetValue<string>("Tokens:Key");
+			byte[] signingKeyBytes = System.Text.Encoding.UTF8.GetBytes(signingKey);
+
+			builder.Services.AddAuthentication(opt =>
+			{
+				opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+				opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+			})
+			.AddJwtBearer(options =>
+			{
+				options.RequireHttpsMetadata = false;
+				options.SaveToken = true;
+				options.TokenValidationParameters = new TokenValidationParameters()
+				{
+					ValidateIssuer = true,
+					ValidIssuer = issuer,
+					ValidateAudience = true,
+					ValidAudience = issuer,
+					ValidateLifetime = true,
+					ValidateIssuerSigningKey = true,
+					ClockSkew = System.TimeSpan.Zero,
+					IssuerSigningKey = new SymmetricSecurityKey(signingKeyBytes)
+				};
 			});
 
 
@@ -60,6 +112,7 @@ namespace eShopSolution.BackendApi
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
 
+			app.UseAuthentication();
 			app.UseRouting();
 
 			app.UseAuthorization();
