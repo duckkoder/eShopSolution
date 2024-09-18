@@ -4,6 +4,9 @@ using eShopSolution.Application.System.Users;
 using eShopSolution.Data.EF;
 using eShopSolution.Data.Entities;
 using eShopSolution.Utilities.Constants;
+using eShopSolution.ViewModels.Catalog.ProductImages;
+using eShopSolution.ViewModels.Catalog.Products;
+using eShopSolution.ViewModels.Common;
 using eShopSolution.ViewModels.System.Users;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -45,9 +48,22 @@ namespace eShopSolution.BackendApi
 			builder.Services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
 			builder.Services.AddTransient<IUserService, UserService>();
 
-			//
+			//Catalog DI
+			builder.Services.AddTransient<IValidator<ProductImageCreateRequest>,ProductImageCreateRequestValidator>();
+			builder.Services.AddTransient<IValidator<ProductImageUpdateRequest>, ProductImageUpdateRequestValidator>();
+
+			builder.Services.AddTransient<IValidator<GetManageProductPagingRequest>, GetManageProductPagingRequestValidator>();
+			builder.Services.AddTransient<IValidator<GetPublicProductPagingRequest>, GetPublicProductPagingRequestValidator>();
+			builder.Services.AddTransient<IValidator<ProductCreateRequest>, ProductCreateRequestValidator>();
+			builder.Services.AddTransient<IValidator<ProductUpdateRequest>, ProductUpdateRequestValidator>();
+		
 			builder.Services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
 			builder.Services.AddTransient<IValidator<RegisterRequest>, RegisterRequestValidation>();
+
+			
+
+			
+
 
 			builder.Services.AddControllers()
 				.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
