@@ -56,7 +56,7 @@ namespace eShopSolution.BackendApi.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
+		public async Task<IActionResult> Create([FromQuery] ProductCreateRequest request)
 		{
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
@@ -70,7 +70,7 @@ namespace eShopSolution.BackendApi.Controllers
 		}
 
 		[HttpPut]
-		public async Task<IActionResult> Update([FromForm] ProductUpdateRequest request)
+		public async Task<IActionResult> Update([FromQuery] ProductUpdateRequest request)
 		{
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
@@ -126,7 +126,7 @@ namespace eShopSolution.BackendApi.Controllers
 		//image
 
 		[HttpPost("{productId}/image")]
-		public async Task<IActionResult> CreateImage(int productId, [FromBody] ProductImageCreateRequest request)
+		public async Task<IActionResult> CreateImage(int productId, [FromForm] ProductImageCreateRequest request)
 		{
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
