@@ -1,36 +1,68 @@
+using eShopSolution.AdminApp.Services;
+using eShopSolution.ViewModels.System.Users;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 namespace eShopSolution.AdminApp
 {
-	public class Program
-	{
-		public static void Main(string[] args)
-		{
-			var builder = WebApplication.CreateBuilder(args);
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddHttpClient();
 
-			// Add services to the container.
-			builder.Services.AddControllersWithViews();
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
+                option =>
+                {
+                    option.LoginPath = "/User/Login/";
+                    option.AccessDeniedPath = "/Account/Forbidden/";
+                }
+                );
 
-			var app = builder.Build();
+            var mvcBuilder = builder.Services.AddRazorPages();
 
-			// Configure the HTTP request pipeline.
-			if (!app.Environment.IsDevelopment())
-			{
-				app.UseExceptionHandler("/Home/Error");
-				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-				app.UseHsts();
-			}
+            if (builder.Environment.IsDevelopment())
+            {
+                mvcBuilder.AddRazorRuntimeCompilation();
+            }
 
-			app.UseHttpsRedirection();
-			app.UseStaticFiles();
 
-			app.UseRouting();
+            // Add services to the container.
 
-			app.UseAuthorization();
+            builder.Services.AddTransient<IUserApiClient, UserApiClient>();
 
-			app.MapControllerRoute(
-				name: "default",
-				pattern: "{controller=Home}/{action=Index}/{id?}");
+            builder.Services.AddControllersWithViews()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
 
-			app.Run();
-		}
-	}
+
+
+            var app = builder.Build();
+
+            // Configure the HTTP request pipeline.
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
+
+
+
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+
+            app.UseAuthentication();
+
+            app.UseRouting();
+
+            app.UseAuthorization();
+
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            app.Run();
+        }
+    }
 }
