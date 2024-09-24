@@ -20,6 +20,8 @@ namespace eShopSolution.AdminApp
                 }
                 );
 
+            
+
             var mvcBuilder = builder.Services.AddRazorPages();
 
             if (builder.Environment.IsDevelopment())
@@ -35,6 +37,12 @@ namespace eShopSolution.AdminApp
             builder.Services.AddControllersWithViews()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
 
+            builder.Services.AddDistributedMemoryCache();
+
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+            });
 
 
             var app = builder.Build();
@@ -57,6 +65,8 @@ namespace eShopSolution.AdminApp
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.MapControllerRoute(
                 name: "default",
