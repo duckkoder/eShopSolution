@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace eShopSolution.Application.Catalog.Products
 {
-    public interface IManageProductService
+    public interface IProductService
 	{
 		public Task<int> Create(ProductCreateRequest request);
 
@@ -32,5 +32,9 @@ namespace eShopSolution.Application.Catalog.Products
 		public Task<ProductImageViewModel> GetImageById(int imageId);
 		public Task<List<ProductImageViewModel>> GetListImages(int productId);
 
-	}
+        Task<PagedResult<ProductViewModel>> GetAllByCatagoryId(string languageId, GetPublicProductPagingRequest request);
+
+        Task<List<ProductViewModel>> GetAll(string id);
+
+    }
 }

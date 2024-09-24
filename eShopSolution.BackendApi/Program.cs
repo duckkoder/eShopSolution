@@ -41,15 +41,14 @@ namespace eShopSolution.BackendApi
 
 			//Declare Dependency injection (DI) 
 			builder.Services.AddTransient<IStorageService, FileStorageService>();
-			builder.Services.AddTransient<IManageProductService, ManageProductService>();
-			builder.Services.AddTransient<IPublicProductService, PublicProductService>();
+			builder.Services.AddTransient<IProductService, ProductService>();
 			builder.Services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
 			builder.Services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
 			builder.Services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
 			builder.Services.AddTransient<IUserService, UserService>();
 
 			//Catalog DI
-			builder.Services.AddTransient<IValidator<ProductImageCreateRequest>,ProductImageCreateRequestValidator>();
+			/*builder.Services.AddTransient<IValidator<ProductImageCreateRequest>,ProductImageCreateRequestValidator>();
 			builder.Services.AddTransient<IValidator<ProductImageUpdateRequest>, ProductImageUpdateRequestValidator>();
 
 			builder.Services.AddTransient<IValidator<GetManageProductPagingRequest>, GetManageProductPagingRequestValidator>();
@@ -58,7 +57,7 @@ namespace eShopSolution.BackendApi
 			builder.Services.AddTransient<IValidator<ProductUpdateRequest>, ProductUpdateRequestValidator>();
 		
 			builder.Services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
-			builder.Services.AddTransient<IValidator<RegisterRequest>, RegisterRequestValidation>();
+			builder.Services.AddTransient<IValidator<RegisterRequest>, RegisterRequestValidation>();*/
 
 			
 
@@ -71,31 +70,37 @@ namespace eShopSolution.BackendApi
 
 			builder.Services.AddSwaggerGen(c =>
 			{
-				c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Swagger eShopSolution", Version = "v1" });
-				c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-				{
-					In = ParameterLocation.Header,
-					Description = "Please enter a valid token",
-					Name = "Authorization",
-					Type = SecuritySchemeType.Http,
-					BearerFormat = "JWT",
-					Scheme = "Bearer"
-				});
-				c.AddSecurityRequirement(new OpenApiSecurityRequirement
-					{
-						{
-							new OpenApiSecurityScheme
-							{
-								Reference = new OpenApiReference
-								{
-									Type=ReferenceType.SecurityScheme,
-									Id="Bearer"
-								}
-							},
-							new string[]{}
-						}
-					});
-			});
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Swagger eShop Solution", Version = "v1" });
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n
+                      Enter 'Bearer' [space] and then your token in the text input below.
+                      \r\n\r\nExample: 'Bearer 12345abcdef'",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                  {
+                    {
+                      new OpenApiSecurityScheme
+                      {
+                        Reference = new OpenApiReference
+                          {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                          },
+                          Scheme = "oauth2",
+                          Name = "Bearer",
+                          In = ParameterLocation.Header,
+                        },
+                        new List<string>()
+                      }
+                    });
+            });
 
 			string issuer = builder.Configuration.GetValue<string>("Tokens:Issuer");
 			string signingKey = builder.Configuration.GetValue<string>("Tokens:Key");
