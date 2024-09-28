@@ -27,7 +27,7 @@ namespace eShopSolution.AdminApp.Controllers
             var request = new GetUserPagingRequest()
             {
                 BearerToken = sessions,
-                Keyword = keyword,
+                Keyword = "d",
                 PageIndex = pageIndex,
                 PageSize = pageSize
             };

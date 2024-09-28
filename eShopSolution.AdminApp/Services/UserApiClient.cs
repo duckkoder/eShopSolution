@@ -33,15 +33,27 @@ namespace eShopSolution.AdminApp.Services
 
         public async Task<PagedResult<UserVM>> GetUserPaging(GetUserPagingRequest request)
         {
+            Console.WriteLine($"Keyword: '{request.Keyword}', BearerToken: '{request.BearerToken}'");
+
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.BearerToken);
-            var response = await client.GetAsync($"/api/users/paging?pageIndex=" +
-                $"{request.PageIndex}&pageSize={request.PageSize}&keyword={request.Keyword}");
-            Console.WriteLine(response.ToString());
-            var body = await response.Content.ReadAsStringAsync();
-            var users = JsonConvert.DeserializeObject<PagedResult<UserVM>>(body);
+
+            string keywordParam = string.IsNullOrWhiteSpace(request.Keyword) ? string.Empty : $"&keyword={request.Keyword}";
+
+            var response = await client.GetAsync($"/api/users/paging?pageIndex={request.PageIndex}&pageSize={request.PageSize}{keywordParam}&BearerToken={request.BearerToken}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var body = await response.Content.ReadAsStringAsync();
+                Console.WriteLine(body);
+                throw new Exception($"Error: {response.StatusCode}, Reason: {body}");
+            }
+
+            var bodyResponse = await response.Content.ReadAsStringAsync();
+            var users = JsonConvert.DeserializeObject<PagedResult<UserVM>>(bodyResponse);
             return users;
         }
+
     }
 }
