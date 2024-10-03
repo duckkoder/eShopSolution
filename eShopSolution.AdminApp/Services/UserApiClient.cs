@@ -33,7 +33,6 @@ namespace eShopSolution.AdminApp.Services
 
         public async Task<PagedResult<UserVM>> GetUserPaging(GetUserPagingRequest request)
         {
-            Console.WriteLine($"Keyword: '{request.Keyword}', BearerToken: '{request.BearerToken}'");
 
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
@@ -46,7 +45,6 @@ namespace eShopSolution.AdminApp.Services
             if (!response.IsSuccessStatusCode)
             {
                 var body = await response.Content.ReadAsStringAsync();
-                Console.WriteLine(body);
                 throw new Exception($"Error: {response.StatusCode}, Reason: {body}");
             }
 
@@ -55,5 +53,16 @@ namespace eShopSolution.AdminApp.Services
             return users;
         }
 
+        public async Task<bool> Register(RegisterRequest request)
+        {
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var response = await client.PostAsync("/api/users/register", httpContent);
+
+            return response.IsSuccessStatusCode;
+        }
     }
 }
