@@ -1,17 +1,16 @@
-﻿@model eShopSolution.ViewModels.System.Users.RegisterRequest
-
+﻿@model eShopSolution.ViewModels.System.Users.UserUpdateRequest
 @{
-    ViewData["Title"] = "Create User";
-    
+    ViewData["title"] = "Edit User";
+    Layout = "_Layout";
+
 }
 
-
 <div class="container-fluid px-4">
-    <h1 class="mt-4">Create</h1>
+    <h1 class="mt-4">Update</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="/">Home</a></li>
         <li class="breadcrumb-item "> <a asp-action="Index" asp-controller="User">Users</a> </li>
-        <li class="breadcrumb-item active">Create</li>
+        <li class="breadcrumb-item active">Edit</li>
 
     </ol>
 
@@ -21,7 +20,7 @@
             <a class="btn btn-success" asp-action="Index" asp-controller="User">Back To List's User</a>
         </div>
         <div class="card-body">
-            <form asp-action="Create" asp-controller="User">
+            <form asp-action="Edit">
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <div class="form-floating mb-3 mb-md-0">
@@ -42,14 +41,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-floating mb-3">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="form-group">
-                        <label asp-for="UserName" class="control-label"></label>
-                        <input asp-for="UserName" class="form-control" />
-                        <span asp-validation-for="UserName" class="text-danger"></span>
-                    </div>
-                </div>
+               
                 <div class="form-floating mb-3">
                     <div class="form-group">
                         <label asp-for="Email" class="control-label"></label>
@@ -71,34 +63,14 @@
                         <span asp-validation-for="Dob" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <div class="form-floating mb-3 mb-md-0">
-                            <div class="form-group">
-                                <label asp-for="Password" class="control-label"></label>
-                                <input asp-for="Password" class="form-control" />
-                                <span asp-validation-for="Password" class="text-danger"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-floating mb-3 mb-md-0">
-                            <div class="form-group">
-                                <label asp-for="PasswordConfirmed" class="control-label"></label>
-                                <input asp-for="PasswordConfirmed" class="form-control" />
-                                <span asp-validation-for="PasswordConfirmed" class="text-danger"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+               
                 <div class="mt-4 mb-0">
                     <div class="form-group">
-                        <input type="submit" class="btn btn-primary" value="Create" />
+                        <input type="submit" class="btn btn-primary" value="Edit" />
                     </div>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
 
