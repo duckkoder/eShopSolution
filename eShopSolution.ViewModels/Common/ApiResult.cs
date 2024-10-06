@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 
 namespace eShopSolution.ViewModels.Common
 {
-    public class RequestBase
+    public class ApiResult<T>
     {
-        public string BearerToken { get; set; }
+        public bool IsSuccessed { get; set; }
+
+        public string Message { get; set; }
+
+        public T ResultObj { get; set; }
+
     }
 }

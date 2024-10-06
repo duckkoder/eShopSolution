@@ -43,6 +43,8 @@ namespace eShopSolution.AdminApp
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
             });
+            //use HttpContextAccessor 
+            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 
             var app = builder.Build();
