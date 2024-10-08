@@ -5,11 +5,14 @@ namespace eShopSolution.Application.System.Users
 {
     public interface IUserService
     {
-        Task<string> Authenticate(LoginRequest request);
+        Task<ApiResult<string>> Authenticate(LoginRequest request);
 
-        Task<bool> Register(RegisterRequest request);
+        Task<ApiResult<bool>> Register(RegisterRequest request);
 
-        Task<PagedResult<UserVM>> GetUserPaging(GetUserPagingRequest request);
+        Task<ApiResult<PagedResult<UserVM>>> GetUserPaging(GetUserPagingRequest request);
 
+        Task<ApiResult<bool>> Update(Guid userId, UserUpdateRequest requestt);
+
+        Task<ApiResult<UserVM>> GetById(Guid id); 
     }
 }

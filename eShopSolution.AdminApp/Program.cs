@@ -15,7 +15,7 @@ namespace eShopSolution.AdminApp
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
                 option =>
                 {
-                    option.LoginPath = "/User/Login/";
+                    option.LoginPath = "/Login/Index/";
                     option.AccessDeniedPath = "/Account/Forbidden/";
                 }
                 );
@@ -43,6 +43,8 @@ namespace eShopSolution.AdminApp
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
             });
+            //use HttpContextAccessor 
+            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 
             var app = builder.Build();

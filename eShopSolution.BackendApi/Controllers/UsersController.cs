@@ -24,13 +24,9 @@ namespace eShopSolution.BackendApi.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var resultToken = await _userService.Authenticate(request);
+            var result = await _userService.Authenticate(request);
 
-            if (string.IsNullOrEmpty(resultToken))
-            {
-                return BadRequest("Username or password is incorrect.");
-            }
-            return Ok(resultToken);
+            return Ok(result);
         }
 
         [HttpPost]
@@ -41,22 +37,40 @@ namespace eShopSolution.BackendApi.Controllers
                 return BadRequest(ModelState);
 
             var result = await _userService.Register(request);
-            if (!result)
-            {
-                return BadRequest("Register is unsuccessful.");
-            }
-            return Ok();
+          
+            return Ok(result);
         }
 
         //http://localhost/api/users/paging?pageIndex=1&pageSize=10&keyword=
         [HttpGet("paging")]
         public async Task<IActionResult> GetAllPaging([FromQuery] GetUserPagingRequest request)
         {
-            var users = await _userService.GetUserPaging(request);
-            Console.WriteLine(users.ToString());
-            return Ok(users);
+            var products = await _userService.GetUserPaging(request);
+            return Ok(products);
         }
 
+        [HttpPut("{userId}")]
+        public async Task<IActionResult> Update(Guid userId,[FromBody] UserUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _userService.Update(userId, request);
+         
+            return Ok(result);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var result = await _userService.GetById(id);
+
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
 
     }
 }

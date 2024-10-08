@@ -1,6 +1,6 @@
-﻿
-@model eShopSolution.ViewModels.System.Users.LoginRequest
+﻿@model eShopSolution.ViewModels.System.Users.LoginRequest
 @{
+    ViewData["Title"] = "Login";
     Layout = null;
 }
 <!DOCTYPE html>
@@ -25,14 +25,16 @@
                             <div class="card shadow-lg border-0 rounded-lg mt-5">
                                 <div class="card-header"><h3 class="text-center font-weight-light my-4">Login </h3></div>
                                 <div class="card-body">
-                                    <form asp-action="Login" asp-controller="User" method="post">
+                                    <form asp-action="Index" asp-controller="Login" method="post">
                                         <div class="form-floating mb-3">
                                             <input class="form-control" asp-for="UserName" type="text" placeholder="Type Your UserName" />
                                             <label for="">UserName</label>
+                                            <span asp-validation-for="UserName" class="text-danger"></span>
                                         </div>
                                         <div class="form-floating mb-3">
                                             <input class="form-control" asp-for="Password" id="inputPassword" type="password" placeholder="Typr Your Password" />
                                             <label for="inputPassword">Password</label>
+                                            <span asp-validation-for="Password" class="text-danger"></span>
                                         </div>
                                         <div class="form-check mb-3">
                                             <input class="form-check-input" asp-for="IsRememberMe" id="inputRememberPassword" type="checkbox" value="true" />
