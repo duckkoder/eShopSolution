@@ -69,6 +69,7 @@ namespace eShopSolution.Application.System.Users
             var data = new UserVM() {
                 FirstName = user.FirstName,
                 LastName = user.LastName,
+                UserName = user.UserName,
                 Dob = user.Dob,
                 Email = user.Email,
                 Id = user.Id,
@@ -98,7 +99,7 @@ namespace eShopSolution.Application.System.Users
                     Email = x.Email,
                     Dob = x.Dob,
                     PhoneNumber = x.PhoneNumber,
-                    UserMame = x.UserName,
+                    UserName = x.UserName,
                     FirstName = x.FirstName,
                     Id = x.Id,
                     LastName = x.LastName
@@ -108,6 +109,8 @@ namespace eShopSolution.Application.System.Users
             var pagedResult = new PagedResult<UserVM>()
             {
                 TotalRecord = totalRow,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
                 Items = data
             };
             return new ApiSuccessResult<PagedResult<UserVM>>(pagedResult);
