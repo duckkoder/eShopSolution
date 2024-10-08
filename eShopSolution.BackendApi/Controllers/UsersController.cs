@@ -26,10 +26,6 @@ namespace eShopSolution.BackendApi.Controllers
 
             var result = await _userService.Authenticate(request);
 
-            if (!result.IsSuccessed)
-            {
-                return BadRequest(result);
-            }
             return Ok(result);
         }
 
@@ -41,10 +37,7 @@ namespace eShopSolution.BackendApi.Controllers
                 return BadRequest(ModelState);
 
             var result = await _userService.Register(request);
-            if (!result.IsSuccessed)
-            {
-                return BadRequest(result);
-            }
+          
             return Ok(result);
         }
 
@@ -63,10 +56,7 @@ namespace eShopSolution.BackendApi.Controllers
                 return BadRequest(ModelState);
 
             var result = await _userService.Update(userId, request);
-            if (!result.IsSuccessed)
-            {
-                return BadRequest(result);
-            }
+         
             return Ok(result);
         }
 
