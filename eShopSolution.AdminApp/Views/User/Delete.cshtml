@@ -1,19 +1,19 @@
 ﻿@model eShopSolution.ViewModels.System.Users.UserVM
+
 @{
-    ViewData["title"] = "Detail User";
+    ViewData["Title"] = "Delete User";
+    
 }
 
-<div class="container-fluid px-4">
-    <h1 class="mt-4">Details</h1>
+<div class="container-fluid">
+    <h1 class="mt-4">Xóa người dùng</h1>
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item"><a href="/">Home</a></li>
-        <li class="breadcrumb-item "> <a asp-action="Index" asp-controller="User">Users</a> </li>
-        <li class="breadcrumb-item active">Details</li>
+        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+        <li class="breadcrumb-item active">Delete user</li>
     </ol>
     <div class="card mb-4">
         <div class="card-header">
-            <i class="fas fa-table mr-1">  </i>
-            <a class="btn btn-success" asp-action="Index" asp-controller="User">Back To List's User</a>
+            <a class="btn btn-success" asp-action="Index" asp-controller="User">Về danh sách</a>
         </div>
         <div class="card-body">
             <dl class="row">
@@ -55,14 +55,9 @@
                 </dd>
             </dl>
         </div>
-        <div>
-            @Html.ActionLink("Edit", "Edit", new {  id = Model.Id  }) |
-            @Html.ActionLink("Delete", "Delete", new { id = Model.Id })
-        </div>
-        </div>
+        <form asp-action="Delete" asp-controller="User" method="post">
+            <input asp-for="Id" type="hidden" />
+            <input type="submit" value="Xóa" class="btn btn-danger" />
+        </form>
     </div>
 </div>
-
-
-
-  

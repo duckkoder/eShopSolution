@@ -11,6 +11,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using System.Data.Entity.Validation;
+using Azure.Core;
 
 namespace eShopSolution.Application.System.Users
 {
@@ -58,6 +59,24 @@ namespace eShopSolution.Application.System.Users
                 signingCredentials: creds);
 
             return new ApiSuccessResult<string>(new JwtSecurityTokenHandler().WriteToken(token));
+        }
+
+        public async Task<ApiResult<bool>> Delete(Guid id)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+            {
+                return new ApiErrorResult<bool>("User does not exist");
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+
+            if (result.Succeeded)
+            {
+                return new ApiSuccessResult<bool>();
+            }
+
+            return new ApiErrorResult<bool>("Delete failed!");
         }
 
         public async Task<ApiResult<UserVM>> GetById(Guid id)
@@ -115,7 +134,6 @@ namespace eShopSolution.Application.System.Users
             };
             return new ApiSuccessResult<PagedResult<UserVM>>(pagedResult);
         }
-
 
 
 
@@ -177,5 +195,8 @@ namespace eShopSolution.Application.System.Users
          
             return new ApiErrorResult<bool>("Update failed!");
         }
+
+
+
     }
 }

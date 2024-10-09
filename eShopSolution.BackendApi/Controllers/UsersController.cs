@@ -52,9 +52,6 @@ namespace eShopSolution.BackendApi.Controllers
         [HttpPut("{userId}")]
         public async Task<IActionResult> Update(Guid userId,[FromBody] UserUpdateRequest request)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             var result = await _userService.Update(userId, request);
          
             return Ok(result);
@@ -64,6 +61,17 @@ namespace eShopSolution.BackendApi.Controllers
         public async Task<IActionResult> GetById(Guid id)
         {
             var result = await _userService.GetById(id);
+
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var result = await _userService.Delete(id);
 
             if (!result.IsSuccessed)
             {

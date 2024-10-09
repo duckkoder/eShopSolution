@@ -13,6 +13,7 @@ namespace eShopSolution.Application.System.Users
 
         Task<ApiResult<bool>> Update(Guid userId, UserUpdateRequest requestt);
 
-        Task<ApiResult<UserVM>> GetById(Guid id); 
+        Task<ApiResult<UserVM>> GetById(Guid id);
+        Task<ApiResult<bool>> Delete(Guid id);
     }
 }
