@@ -12,6 +12,13 @@ namespace eShopSolution.ViewModels.Common
             ResultObj = resultObj;
         }
 
+        public ApiSuccessResult<T> CreateMessage(string message)
+        {
+            IsSuccessed = true;
+            Message = message;
+            return this;
+        }
+
         public ApiSuccessResult()
         {
             IsSuccessed = true;
