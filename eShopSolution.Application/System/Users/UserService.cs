@@ -73,7 +73,7 @@ namespace eShopSolution.Application.System.Users
 
             if (result.Succeeded)
             {
-                return new ApiSuccessResult<bool>();
+                return new ApiSuccessResult<bool>().CreateMessage("Delete Successfully!");
             }
 
             return new ApiErrorResult<bool>("Delete failed!");
@@ -161,7 +161,8 @@ namespace eShopSolution.Application.System.Users
             var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
             {
-                return new ApiSuccessResult<bool>();
+                return new ApiSuccessResult<bool>().CreateMessage("Registration Successfully!");
+
             }
             return new ApiErrorResult<bool>("Registration failed!");
         }
@@ -179,8 +180,6 @@ namespace eShopSolution.Application.System.Users
             var user = await _userManager.FindByIdAsync(userId.ToString());
             
             user.Dob = request.Dob;
-        
-
             user.Email = request.Email;
             user.FirstName = request.FirstName;
             user.LastName = request.LastName;
@@ -190,7 +189,7 @@ namespace eShopSolution.Application.System.Users
 
             if (result.Succeeded)
             {
-                return new ApiSuccessResult<bool>();
+                return new ApiSuccessResult<bool>().CreateMessage("Update Successfully!");
             }
          
             return new ApiErrorResult<bool>("Update failed!");

@@ -28,7 +28,8 @@ namespace eShopSolution.ViewModels.System.Users
 
             RuleFor(x => x.PhoneNumber)
                 .NotEmpty().WithMessage("Phone number is required.")
-                .Matches(@"^\+?[1-9]\d{1,14}$").WithMessage("Phone number must be valid and contain only digits.");
+                .Matches(@"^(0[3|5|7|8|9])+([0-9]{8})$").WithMessage("Invalid phone number format.");
+
         }
     }
 }

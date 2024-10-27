@@ -20,7 +20,7 @@ namespace eShopSolution.AdminApp.Controllers
         public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 10)
         {
             var sessions = HttpContext.Session.GetString("Token");
-            
+
             var request = new GetUserPagingRequest()
             {
                 Keyword = keyword,
@@ -28,11 +28,12 @@ namespace eShopSolution.AdminApp.Controllers
                 PageSize = pageSize
             };
             var data = await _userApiClient.GetUserPaging(request);
-            
+            if (TempData["message"]!=null)
+                ViewBag.message = TempData["message"] as string;
             return View(data.ResultObj);
         }
 
-        
+
 
         [HttpPost]
         public async Task<IActionResult> Logout()
@@ -57,7 +58,10 @@ namespace eShopSolution.AdminApp.Controllers
 
             var result = await _userApiClient.RegisterUser(request);
             if (result.IsSuccessed)
+            {
+                TempData["message"] = result.Message;
                 return RedirectToAction("Index");
+            }
 
             ModelState.AddModelError("", result.Message);
             return View(request);
@@ -79,6 +83,7 @@ namespace eShopSolution.AdminApp.Controllers
                     PhoneNumber = user.PhoneNumber,
                     Id = id
                 };
+
                 return View(updateRequest);
             }
             return RedirectToAction("Error", "Home");
@@ -91,8 +96,10 @@ namespace eShopSolution.AdminApp.Controllers
             var result = await _userApiClient.UpdateUser(request.Id, request);
 
             if (result.IsSuccessed)
+            {
+                TempData["message"] = result.Message;
                 return RedirectToAction("Index");
-
+            }
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
@@ -120,6 +127,7 @@ namespace eShopSolution.AdminApp.Controllers
                 ModelState.AddModelError("", result.Message);
                 return View();
             }
+
             return View(result.ResultObj);
         }
 
@@ -132,6 +140,7 @@ namespace eShopSolution.AdminApp.Controllers
             {
                 return RedirectToAction("Error", "Home");
             }
+            TempData["message"] = result.Message;
             return RedirectToAction("Index");
         }
     }
