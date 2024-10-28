@@ -1,5 +1,6 @@
 using eShopSolution.Application.Catalog.Products;
 using eShopSolution.Application.Common;
+using eShopSolution.Application.System.Roles;
 using eShopSolution.Application.System.Users;
 using eShopSolution.Data.EF;
 using eShopSolution.Data.Entities;
@@ -46,9 +47,11 @@ namespace eShopSolution.BackendApi
 			builder.Services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
 			builder.Services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
 			builder.Services.AddTransient<IUserService, UserService>();
+            builder.Services.AddTransient<IRoleService, RoleService>();
 
-			//Catalog DI
-			builder.Services.AddTransient<IValidator<ProductImageCreateRequest>, ProductImageCreateRequestValidator>();
+
+            //Catalog DI
+            builder.Services.AddTransient<IValidator<ProductImageCreateRequest>, ProductImageCreateRequestValidator>();
 			builder.Services.AddTransient<IValidator<ProductImageUpdateRequest>, ProductImageUpdateRequestValidator>();
 
 			builder.Services.AddTransient<IValidator<GetManageProductPagingRequest>, GetManageProductPagingRequestValidator>();

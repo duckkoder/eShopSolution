@@ -1,4 +1,5 @@
 ﻿using eShopSolution.AdminApp.Services;
+using eShopSolution.ViewModels.Common;
 using eShopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -10,10 +11,12 @@ namespace eShopSolution.AdminApp.Controllers
     public class UserController : BaseController
     {
         private readonly IUserApiClient _userApiClient;
+        private readonly IRoleApiClient _roleApiClient;
         private readonly IConfiguration _configuration;
-        public UserController(IUserApiClient userApiClient, IConfiguration configuration)
+        public UserController(IUserApiClient userApiClient, IConfiguration configuration, IRoleApiClient roleApiClient)
         {
             _userApiClient = userApiClient;
+            _roleApiClient = roleApiClient;
             _configuration = configuration;
         }
         [HttpGet]
@@ -83,7 +86,6 @@ namespace eShopSolution.AdminApp.Controllers
                     PhoneNumber = user.PhoneNumber,
                     Id = id
                 };
-
                 return View(updateRequest);
             }
             return RedirectToAction("Error", "Home");
@@ -112,7 +114,7 @@ namespace eShopSolution.AdminApp.Controllers
             if (!result.IsSuccessed)
             {
                 ModelState.AddModelError("", result.Message);
-                return View();
+                return RedirectToAction("Index");
             }
             return View(result.ResultObj);
         }
@@ -125,7 +127,7 @@ namespace eShopSolution.AdminApp.Controllers
             if (!result.IsSuccessed)
             {
                 ModelState.AddModelError("", result.Message);
-                return View();
+                return RedirectToAction("Index");
             }
 
             return View(result.ResultObj);
@@ -142,6 +144,49 @@ namespace eShopSolution.AdminApp.Controllers
             }
             TempData["message"] = result.Message;
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RoleAssign(Guid id)
+        {
+            var roleAssignRequest = await GetRoleAssignRequest(id);
+
+            return View(roleAssignRequest);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RoleAssign(RoleAssignRequest request)
+        {
+           
+            var result = await _userApiClient.RoleAssignUser(request.id, request);
+
+            if (!result.IsSuccessed)
+            {
+                ModelState.AddModelError("", result.Message);
+                return View(await GetRoleAssignRequest(request.id));
+            }
+            TempData["message"] = result.Message;
+            return RedirectToAction("Index");
+        }
+
+        private async Task<RoleAssignRequest> GetRoleAssignRequest(Guid id)
+        {
+            var result = await _userApiClient.GetById(id);
+            var rolesResult = await _roleApiClient.GetAll();
+
+            var user = result.ResultObj;
+            var roleAssignRequest = new RoleAssignRequest();
+
+            foreach (var role in rolesResult.ResultObj)
+            {
+                roleAssignRequest.Roles.Add(new SelectedRole()
+                {
+                    Id = role.Id,
+                    Name = role.Name,
+                    IsSelected = user.Roles.Contains(role.Name)
+                });
+            }
+            return roleAssignRequest;
         }
     }
 }

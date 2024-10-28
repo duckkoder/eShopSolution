@@ -85,6 +85,7 @@ namespace eShopSolution.Application.System.Users
             if (user == null) {
                 return new ApiErrorResult<UserVM>("User does not exist");
             }
+            var roles = await _userManager.GetRolesAsync(user);
             var data = new UserVM() {
                 FirstName = user.FirstName,
                 LastName = user.LastName,
@@ -92,7 +93,8 @@ namespace eShopSolution.Application.System.Users
                 Dob = user.Dob,
                 Email = user.Email,
                 Id = user.Id,
-                PhoneNumber = user.PhoneNumber
+                PhoneNumber = user.PhoneNumber,
+                Roles = roles
             };
 
             return new ApiSuccessResult<UserVM>(data);
@@ -167,11 +169,35 @@ namespace eShopSolution.Application.System.Users
             return new ApiErrorResult<bool>("Registration failed!");
         }
 
+        public async Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null) {
+                return new ApiErrorResult<bool>("User does not exist");
+            }
 
+            var removeRoles = request.Roles.Where(x => x.IsSelected == false).Select(x=> x.Name).ToList();
+            
+            foreach (var role in removeRoles)
+            {
+                if (await _userManager.IsInRoleAsync(user, role))
+                {
+                    await _userManager.RemoveFromRoleAsync(user, role);
+                }
+            }
+            var addRoles = request.Roles.Where(x => x.IsSelected == true).Select(x => x.Name).ToList();
+            foreach (var role in addRoles)
+            {
+                if(! await _userManager.IsInRoleAsync(user, role))
+                {
+                    await _userManager.AddToRoleAsync(user, role);
+                }
+            }
+            return new ApiSuccessResult<bool>().CreateMessage("Registration role Successfully!");
+        }
 
         public async Task<ApiResult<bool>> Update(Guid userId, UserUpdateRequest request)
         {
-
             if (await _userManager.Users.AnyAsync(x => x.Email == request.Email && x.Id != userId))
             {
                 return new ApiErrorResult<bool>("Email already exists!");
