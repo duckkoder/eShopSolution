@@ -14,39 +14,43 @@
         <div class="card-header">
             <i class="fas fa-table mr-1">  </i>
             <a class="btn btn-success" asp-action="Index" asp-controller="User">Back To List's User</a>
-        </div>
         <div class="card-body">
-            <div class="row">
-                <div class="col-md-4">
-                    <form asp-action="RoleAssign" method="post">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <input type="hidden" asp-for="id" />
+            <form asp-action="RoleAssign" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="id" />
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Role's name</th>
+                            <th>Description</th>
+                            <th> </th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         @for (int i = 0; i < Model.Roles.Count; i++)
                         {
-                            <div class="form-group">
-                                <label asp-for="Roles[i].Name" class="control-label">
+                            <tr>
+                                <td>
                                     @Model.Roles[i].Name
-                                    <input type="checkbox" asp-for="Roles[i].IsSelected" />
                                     <input type="hidden" asp-for="Roles[i].Id" />
                                     <input type="hidden" asp-for="Roles[i].Name" />
-                                </label>
-                                
-                           
-                            </div>
+                                </td>
+                                <td>
+                                    @Model.Roles[i].Description
+                                </td>
+                                <td class="text-center">
+                                    <input type="checkbox" asp-for="Roles[i].IsSelected" />
+                                </td>
+                            </tr>
                         }
-                        <div class="form-group">
-                            <input type="submit" value="Save" class="btn btn-primary" />
-                        </div>
-                    </form>
+                    </tbody>
+                </table>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
                 </div>
-            </div> 
+            </form>
         </div>
-        <div>
         </div>
     </div>
 </div>
-</div>
-
-
-
 
