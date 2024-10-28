@@ -183,6 +183,7 @@ namespace eShopSolution.AdminApp.Controllers
                 {
                     Id = role.Id,
                     Name = role.Name,
+                    Description = role.Description,
                     IsSelected = user.Roles.Contains(role.Name)
                 });
             }
