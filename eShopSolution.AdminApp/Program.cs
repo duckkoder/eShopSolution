@@ -33,6 +33,8 @@ namespace eShopSolution.AdminApp
             // Add services to the container.
 
             builder.Services.AddTransient<IUserApiClient, UserApiClient>();
+            builder.Services.AddTransient<IRoleApiClient, RoleApiClient>();
+
 
             builder.Services.AddControllersWithViews()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
