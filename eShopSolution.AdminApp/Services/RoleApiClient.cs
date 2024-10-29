@@ -23,13 +23,13 @@ namespace eShopSolution.AdminApp.Services
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
-
             var response = await client.GetAsync($"/api/roles");
             var body = await response.Content.ReadAsStringAsync();
-
             if (response.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<ApiSuccessResult<List<RoleVM>>>(body);
-            return JsonConvert.DeserializeObject<ApiErrorResult<List<RoleVM>>>("Role Assign Failed");
+            {
+                return JsonConvert.DeserializeObject < ApiSuccessResult<List<RoleVM>>>(body);
+            }
+            return JsonConvert.DeserializeObject<ApiErrorResult<List<RoleVM>>>(body);
         }
     }
 }

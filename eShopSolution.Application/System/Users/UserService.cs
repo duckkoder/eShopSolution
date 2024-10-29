@@ -172,27 +172,29 @@ namespace eShopSolution.Application.System.Users
         public async Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
-            if (user == null) {
+            if (user == null)
+            {
                 return new ApiErrorResult<bool>("User does not exist");
             }
+            var removedRoles = request.Roles.Where(x => x.IsSelected == false).Select(x => x.Name).ToList();
+            foreach (var roleName in removedRoles)
+            {
+                if (await _userManager.IsInRoleAsync(user, roleName) == true)
+                {
+                    await _userManager.RemoveFromRoleAsync(user, roleName);
+                }
+            }
+            await _userManager.RemoveFromRolesAsync(user, removedRoles);
 
-            var removeRoles = request.Roles.Where(x => x.IsSelected == false).Select(x=> x.Name).ToList();
+            var addedRoles = request.Roles.Where(x => x.IsSelected).Select(x => x.Name).ToList();
+            foreach (var roleName in addedRoles)
+            {
+                if (await _userManager.IsInRoleAsync(user, roleName) == false)
+                {
+                    await _userManager.AddToRoleAsync(user, roleName);
+                }
+            }
             
-            foreach (var role in removeRoles)
-            {
-                if (await _userManager.IsInRoleAsync(user, role))
-                {
-                    await _userManager.RemoveFromRoleAsync(user, role);
-                }
-            }
-            var addRoles = request.Roles.Where(x => x.IsSelected == true).Select(x => x.Name).ToList();
-            foreach (var role in addRoles)
-            {
-                if(! await _userManager.IsInRoleAsync(user, role))
-                {
-                    await _userManager.AddToRoleAsync(user, role);
-                }
-            }
             return new ApiSuccessResult<bool>().CreateMessage("Registration role Successfully!");
         }
 

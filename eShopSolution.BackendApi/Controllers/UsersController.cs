@@ -83,7 +83,14 @@ namespace eShopSolution.BackendApi.Controllers
         [HttpPut("{id}/roles")]
         public async Task<IActionResult> RoleAssign(Guid id, [FromBody] RoleAssignRequest request)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var result = await _userService.RoleAssign(id, request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
             return Ok(result);
         }
 

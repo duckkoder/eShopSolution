@@ -150,41 +150,44 @@ namespace eShopSolution.AdminApp.Controllers
         public async Task<IActionResult> RoleAssign(Guid id)
         {
             var roleAssignRequest = await GetRoleAssignRequest(id);
-
+            roleAssignRequest.id = id;
             return View(roleAssignRequest);
         }
 
         [HttpPost]
         public async Task<IActionResult> RoleAssign(RoleAssignRequest request)
         {
-           
+            if (!ModelState.IsValid)
+                return View();
+
             var result = await _userApiClient.RoleAssignUser(request.id, request);
 
-            if (!result.IsSuccessed)
+            if (result.IsSuccessed)
             {
-                ModelState.AddModelError("", result.Message);
-                return View(await GetRoleAssignRequest(request.id));
+                TempData["message"] = result.Message;
+                return RedirectToAction("Index");
             }
-            TempData["message"] = result.Message;
-            return RedirectToAction("Index");
+
+            ModelState.AddModelError("", result.Message);
+            var roleAssignRequest = await GetRoleAssignRequest(request.id);
+
+            return View(roleAssignRequest);
         }
 
         private async Task<RoleAssignRequest> GetRoleAssignRequest(Guid id)
         {
-            var result = await _userApiClient.GetById(id);
-            var rolesResult = await _roleApiClient.GetAll();
-
-            var user = result.ResultObj;
+            var userObj = await _userApiClient.GetById(id);
+            var roleObj = await _roleApiClient.GetAll();
             var roleAssignRequest = new RoleAssignRequest();
-
-            foreach (var role in rolesResult.ResultObj)
+          
+            foreach (var role in roleObj.ResultObj)
             {
                 roleAssignRequest.Roles.Add(new SelectedRole()
                 {
                     Id = role.Id,
                     Name = role.Name,
-                    Description = role.Description,
-                    IsSelected = user.Roles.Contains(role.Name)
+                    IsSelected = userObj.ResultObj.Roles.Contains(role.Name),
+                    Description = role.Description
                 });
             }
             return roleAssignRequest;

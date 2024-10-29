@@ -14,7 +14,8 @@ namespace eShopSolution.Application.System.Roles
         {
             _roleManager = roleManager;
         }
-        public async Task<ApiResult<List<RoleVM>>> GetAll()
+     
+        public async Task<ApiResult< List<RoleVM>>> GetAll()
         {
             var roles = await _roleManager.Roles
                 .Select(x => new RoleVM()
