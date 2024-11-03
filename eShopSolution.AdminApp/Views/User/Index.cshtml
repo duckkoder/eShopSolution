@@ -25,15 +25,15 @@
             <a class="btn btn-success" asp-action="Create" asp-controller="User">Create User</a>
         </div>
         <div class="card-body">
-            <div id="msgAlert" class="alert alert-success" role="alert">
 
-                @if (ViewBag.message != null)
-                {
+            @if (ViewBag.message != null)
+            {
+                <div id="msgAlert" class="alert alert-success" role="alert">
                     <div class="row">
                         @ViewBag.message
                     </div>
-                }
-            </div>
+                </div>
+            }
 
             <table id="datatablesSimple">
                 <thead>
@@ -42,7 +42,7 @@
                             Id
                         </th>
                         <th>
-                            UserMame
+                            UserName
                         </th>
                         <th>
                             FirstName

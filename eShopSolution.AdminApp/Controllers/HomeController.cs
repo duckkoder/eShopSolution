@@ -1,5 +1,7 @@
 using eShopSolution.AdminApp.Models;
+using eShopSolution.Utilities.Constants;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -17,7 +19,8 @@ namespace eShopSolution.AdminApp.Controllers
 		public IActionResult Index()
 		{
 			var user = User.Identity.Name;
-			return View();
+            ViewData["Title"] = "User";
+            return View();
 		}
 
 		public IActionResult Privacy()
@@ -29,6 +32,15 @@ namespace eShopSolution.AdminApp.Controllers
 		public IActionResult Error()
 		{
 			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+		}
+
+		[HttpPost]
+		public IActionResult Language(NavigationViewModel navigationViewModel)
+		{
+			HttpContext.Session.SetString(SystemConstants.AppSettings.DefaultLanguageID,navigationViewModel.CurrentLanguage);
+
+			return View("Index");
+
 		}
 	}
 }
