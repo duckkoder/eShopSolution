@@ -1,0 +1,7 @@
+﻿.no-translate {
+    display: none; /* Hoặc sử dụng display: inline; để hiển thị dưới dạng không dịch */
+}
+iframe {
+    height: 0;
+    display: none
+}

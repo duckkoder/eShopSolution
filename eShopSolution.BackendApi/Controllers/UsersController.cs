@@ -42,8 +42,8 @@ namespace eShopSolution.BackendApi.Controllers
         }
 
         //http://localhost/api/users/paging?pageIndex=1&pageSize=10&keyword=
-        [HttpGet("paging")]
-        public async Task<IActionResult> GetAllPaging([FromQuery] GetUserPagingRequest request)
+        [HttpPost("paging")]
+        public async Task<IActionResult> GetAllPaging([FromBody] GetUserPagingRequest request)
         {
             var products = await _userService.GetUserPaging(request);
             return Ok(products);
@@ -73,6 +73,20 @@ namespace eShopSolution.BackendApi.Controllers
         {
             var result = await _userService.Delete(id);
 
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+
+        [HttpPut("{id}/roles")]
+        public async Task<IActionResult> RoleAssign(Guid id, [FromBody] RoleAssignRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _userService.RoleAssign(id, request);
             if (!result.IsSuccessed)
             {
                 return BadRequest(result);

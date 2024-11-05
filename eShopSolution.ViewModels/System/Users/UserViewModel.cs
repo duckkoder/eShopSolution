@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace eShopSolution.ViewModels.System.Users
 {
-    public class UserVM
+    public class UserViewModel
     {
         public Guid Id { get; set; }
-        public string UserName {  get; set; }
+        public string UserName { get; set; }
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
@@ -19,5 +19,7 @@ namespace eShopSolution.ViewModels.System.Users
         public string PhoneNumber { get; set; }
 
         public DateTime Dob { get; set; }
+
+        public IList<string> Roles { get ; set;}
     }
 }

@@ -79,27 +79,29 @@ namespace eShopSolution.Application.System.Users
             return new ApiErrorResult<bool>("Delete failed!");
         }
 
-        public async Task<ApiResult<UserVM>> GetById(Guid id)
+        public async Task<ApiResult<UserViewModel>> GetById(Guid id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null) {
-                return new ApiErrorResult<UserVM>("User does not exist");
+                return new ApiErrorResult<UserViewModel>("User does not exist");
             }
-            var data = new UserVM() {
+            var roles = await _userManager.GetRolesAsync(user);
+            var data = new UserViewModel() {
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 UserName = user.UserName,
                 Dob = user.Dob,
                 Email = user.Email,
                 Id = user.Id,
-                PhoneNumber = user.PhoneNumber
+                PhoneNumber = user.PhoneNumber,
+                Roles = roles
             };
 
-            return new ApiSuccessResult<UserVM>(data);
+            return new ApiSuccessResult<UserViewModel>(data);
 
         }
 
-        public async Task<ApiResult<PagedResult<UserVM>>> GetUserPaging(GetUserPagingRequest request)
+        public async Task<ApiResult<PagedResult<UserViewModel>>> GetUserPaging(GetUserPagingRequest request)
         {
             var query = _userManager.Users;
             if (!string.IsNullOrEmpty(request.Keyword))
@@ -113,7 +115,7 @@ namespace eShopSolution.Application.System.Users
 
             var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
-                .Select(x => new UserVM()
+                .Select(x => new UserViewModel()
                 {
                     Email = x.Email,
                     Dob = x.Dob,
@@ -125,14 +127,14 @@ namespace eShopSolution.Application.System.Users
                 }).ToListAsync();
 
             //4. Select and projection
-            var pagedResult = new PagedResult<UserVM>()
+            var pagedResult = new PagedResult<UserViewModel>()
             {
                 TotalRecord = totalRow,
                 PageIndex = request.PageIndex,
                 PageSize = request.PageSize,
                 Items = data
             };
-            return new ApiSuccessResult<PagedResult<UserVM>>(pagedResult);
+            return new ApiSuccessResult<PagedResult<UserViewModel>>(pagedResult);
         }
 
 
@@ -167,11 +169,37 @@ namespace eShopSolution.Application.System.Users
             return new ApiErrorResult<bool>("Registration failed!");
         }
 
+        public async Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+            {
+                return new ApiErrorResult<bool>("User does not exist");
+            }
+            var removedRoles = request.Roles.Where(x => x.IsSelected == false).Select(x => x.Name).ToList();
+            foreach (var roleName in removedRoles)
+            {
+                if (await _userManager.IsInRoleAsync(user, roleName) == true)
+                {
+                    await _userManager.RemoveFromRoleAsync(user, roleName);
+                }
+            }
+            await _userManager.RemoveFromRolesAsync(user, removedRoles);
 
+            var addedRoles = request.Roles.Where(x => x.IsSelected).Select(x => x.Name).ToList();
+            foreach (var roleName in addedRoles)
+            {
+                if (await _userManager.IsInRoleAsync(user, roleName) == false)
+                {
+                    await _userManager.AddToRoleAsync(user, roleName);
+                }
+            }
+            
+            return new ApiSuccessResult<bool>().CreateMessage("Registration role Successfully!");
+        }
 
         public async Task<ApiResult<bool>> Update(Guid userId, UserUpdateRequest request)
         {
-
             if (await _userManager.Users.AnyAsync(x => x.Email == request.Email && x.Id != userId))
             {
                 return new ApiErrorResult<bool>("Email already exists!");

@@ -9,11 +9,13 @@ namespace eShopSolution.Application.System.Users
 
         Task<ApiResult<bool>> Register(RegisterRequest request);
 
-        Task<ApiResult<PagedResult<UserVM>>> GetUserPaging(GetUserPagingRequest request);
+        Task<ApiResult<PagedResult<UserViewModel>>> GetUserPaging(GetUserPagingRequest request);
 
         Task<ApiResult<bool>> Update(Guid userId, UserUpdateRequest requestt);
 
-        Task<ApiResult<UserVM>> GetById(Guid id);
+        Task<ApiResult<UserViewModel>> GetById(Guid id);
         Task<ApiResult<bool>> Delete(Guid id);
+        Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request);
+
     }
 }

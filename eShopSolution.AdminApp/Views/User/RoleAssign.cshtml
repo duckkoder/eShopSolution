@@ -1,0 +1,60 @@
+﻿ @model eShopSolution.ViewModels.System.Users.RoleAssignRequest
+@{
+    ViewData["Title"] = "Role Assign";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Details</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item "> <a asp-action="Index" asp-controller="User">Users</a> </li>
+        <li class="breadcrumb-item active">Role Assign</li>
+    </ol>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table mr-1">  </i>
+            <a class="btn btn-success" asp-action="Index" asp-controller="User">Back To List's User</a>
+        </div>
+        <div class="card-body">
+            <form asp-action="RoleAssign" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="id" />
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Role's name</th>
+                            <th>Description</th>
+                            <th> </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Roles.Count; i++)
+                        {
+                            <tr>
+                                <td class="notranslate">
+                                    @Model.Roles[i].Name
+                                </td>
+                                <td>
+                                    @Model.Roles[i].Description
+                                </td>
+                                <td class="text-center">
+                                    <div class="form-group">
+                                        <input type="checkbox" asp-for="Roles[i].IsSelected" />
+                                        <input type="hidden" asp-for="Roles[i].Id" />
+                                        <input type="hidden" asp-for="Roles[i].Name" />
+                                        <input type="hidden" asp-for="Roles[i].Description" />
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
