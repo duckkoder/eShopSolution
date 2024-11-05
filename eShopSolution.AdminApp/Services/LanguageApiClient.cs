@@ -16,10 +16,10 @@ namespace eShopSolution.AdminApp.Services
         }
 
 
-    public async Task<ApiResult<List<LanguageVM>>> GetAll()
+    public async Task<ApiResult<List<LanguageViewModel>>> GetAll()
         {
             string url = "/api/languages";
-            return await GetAsync<ApiResult<List<LanguageVM>>>(url);
+            return await GetAsync<ApiResult<List<LanguageViewModel>>>(url);
 
         }
     }

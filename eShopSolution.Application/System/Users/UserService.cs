@@ -79,14 +79,14 @@ namespace eShopSolution.Application.System.Users
             return new ApiErrorResult<bool>("Delete failed!");
         }
 
-        public async Task<ApiResult<UserVM>> GetById(Guid id)
+        public async Task<ApiResult<UserViewModel>> GetById(Guid id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null) {
-                return new ApiErrorResult<UserVM>("User does not exist");
+                return new ApiErrorResult<UserViewModel>("User does not exist");
             }
             var roles = await _userManager.GetRolesAsync(user);
-            var data = new UserVM() {
+            var data = new UserViewModel() {
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 UserName = user.UserName,
@@ -97,11 +97,11 @@ namespace eShopSolution.Application.System.Users
                 Roles = roles
             };
 
-            return new ApiSuccessResult<UserVM>(data);
+            return new ApiSuccessResult<UserViewModel>(data);
 
         }
 
-        public async Task<ApiResult<PagedResult<UserVM>>> GetUserPaging(GetUserPagingRequest request)
+        public async Task<ApiResult<PagedResult<UserViewModel>>> GetUserPaging(GetUserPagingRequest request)
         {
             var query = _userManager.Users;
             if (!string.IsNullOrEmpty(request.Keyword))
@@ -115,7 +115,7 @@ namespace eShopSolution.Application.System.Users
 
             var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
-                .Select(x => new UserVM()
+                .Select(x => new UserViewModel()
                 {
                     Email = x.Email,
                     Dob = x.Dob,
@@ -127,14 +127,14 @@ namespace eShopSolution.Application.System.Users
                 }).ToListAsync();
 
             //4. Select and projection
-            var pagedResult = new PagedResult<UserVM>()
+            var pagedResult = new PagedResult<UserViewModel>()
             {
                 TotalRecord = totalRow,
                 PageIndex = request.PageIndex,
                 PageSize = request.PageSize,
                 Items = data
             };
-            return new ApiSuccessResult<PagedResult<UserVM>>(pagedResult);
+            return new ApiSuccessResult<PagedResult<UserViewModel>>(pagedResult);
         }
 
 

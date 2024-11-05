@@ -12,7 +12,7 @@ namespace eShopSolution.AdminApp.Services
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
-        public readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         protected ApiClientBase(IHttpClientFactory httpClientFactory, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
@@ -29,10 +29,7 @@ namespace eShopSolution.AdminApp.Services
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
             var response = await client.GetAsync(url);
             var body = await response.Content.ReadAsStringAsync();
-            if (response.IsSuccessStatusCode)
-            {
-                return JsonConvert.DeserializeObject<TResponse>(body);
-            }
+
             return JsonConvert.DeserializeObject<TResponse>(body);
         }
 
@@ -44,8 +41,6 @@ namespace eShopSolution.AdminApp.Services
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
             var response = await client.PostAsync(url, httpContent);
             var result = await response.Content.ReadAsStringAsync();
-            if (response.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<TResponse>(result);
 
             return JsonConvert.DeserializeObject<TResponse>(result);
         }
@@ -58,8 +53,17 @@ namespace eShopSolution.AdminApp.Services
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
             var response = await client.PutAsync(url, httpContent);
             var result = await response.Content.ReadAsStringAsync();
-            if (response.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<TResponse>(result);
+
+            return JsonConvert.DeserializeObject<TResponse>(result);
+        }
+        protected async Task<TResponse> PutAsync<TResponse>(string url)
+        {
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString(SystemConstants.AppSettings.Token);
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+            var response = await client.PutAsync(url,null);
+            var result = await response.Content.ReadAsStringAsync();
 
             return JsonConvert.DeserializeObject<TResponse>(result);
         }
@@ -74,8 +78,6 @@ namespace eShopSolution.AdminApp.Services
             var response = await client.DeleteAsync(url);
 
             var result = await response.Content.ReadAsStringAsync();
-            if (response.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<TResponse>(result);
 
             return JsonConvert.DeserializeObject<TResponse>(result);
         }

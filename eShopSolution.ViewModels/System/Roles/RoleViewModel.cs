@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace eShopSolution.ViewModels.System.Language
+namespace eShopSolution.ViewModels.System.Roles
 {
-    public class LanguageVM
+    public class RoleViewModel
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         public string Name { get; set; }
+
+        public string Description { get; set; }
     }
 }

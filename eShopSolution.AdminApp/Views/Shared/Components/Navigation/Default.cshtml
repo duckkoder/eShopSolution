@@ -13,12 +13,13 @@
             </div>
         </div>
     </form>
-     <form id="frmChangeLanguage" action="/Home/Language" method="post"
+    <div id="google_translate_element" class="d-none d-md-inline-block form-inline ml-0 mr-0 mr-md-3 my-2 my-md-0">></div>
+    @* <form id="frmChangeLanguage" action="/Home/Language" method="post"
           class="d-none d-md-inline-block form-inline ml-0 mr-0 mr-md-3 my-2 my-md-0">
         <select class="form-control" onchange="this.form.submit()" asp-for="CurrentLanguage"
                 asp-items="@(new SelectList(Model.Languages,"Id", "Name", Model.CurrentLanguage))">
         </select>
-    </form> 
+    </form>  *@
 
     <!-- Navbar-->
    

@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Xml.Linq;
 
 namespace eShopSolution.AdminApp.Controllers
 {
@@ -38,9 +40,7 @@ namespace eShopSolution.AdminApp.Controllers
 		public IActionResult Language(NavigationViewModel navigationViewModel)
 		{
 			HttpContext.Session.SetString(SystemConstants.AppSettings.DefaultLanguageID,navigationViewModel.CurrentLanguage);
-
-			return View("Index");
-
+            return View("Index");
 		}
 	}
 }

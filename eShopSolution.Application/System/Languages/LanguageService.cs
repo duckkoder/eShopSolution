@@ -15,14 +15,14 @@ namespace eShopSolution.Application.System.Languages
             _context = context;
             _configuration = configuration;
         }
-        public async Task<ApiResult<List<LanguageVM>>> GetAll()
+        public async Task<ApiResult<List<LanguageViewModel>>> GetAll()
         {
-            var languages = await _context.Languages.Select(x=> new LanguageVM() { Id = x.Id,Name=x.Name}).ToListAsync();
+            var languages = await _context.Languages.Select(x=> new LanguageViewModel() { Id = x.Id,Name=x.Name}).ToListAsync();
             if (languages.Any())
             {
-                return new ApiSuccessResult<List<LanguageVM>>(languages);
+                return new ApiSuccessResult<List<LanguageViewModel>>(languages);
             }
-            return new ApiErrorResult<List<LanguageVM>>("Get Languages Unsuccessfully");
+            return new ApiErrorResult<List<LanguageViewModel>>("Get Languages Unsuccessfully");
         }
     }
 }
