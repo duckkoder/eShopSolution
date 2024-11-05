@@ -1,4 +1,4 @@
-﻿@model eShopSolution.ViewModels.Common.PagedResult<eShopSolution.ViewModels.System.Users.UserVM>
+﻿@model eShopSolution.ViewModels.Common.PagedResult<eShopSolution.ViewModels.System.Users.UserViewModel>
 
 @{
     ViewData["Title"] = "Users";
@@ -13,7 +13,7 @@
 }
 
 <div class="container-fluid px-4">
-    <h1 class="mt-4">DataTable's' Users</h1>
+    <h1 class="mt-4">DataTable's Users</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="/">Home</a></li>
         <li class="breadcrumb-item active">Users</li>
@@ -25,15 +25,15 @@
             <a class="btn btn-success" asp-action="Create" asp-controller="User">Create User</a>
         </div>
         <div class="card-body">
-            <div id="msgAlert" class="alert alert-success" role="alert">
 
-                @if (ViewBag.message != null)
-                {
+            @if (ViewBag.message != null)
+            {
+                <div id="msgAlert" class="alert alert-success" role="alert">
                     <div class="row">
                         @ViewBag.message
                     </div>
-                }
-            </div>
+                </div>
+            }
 
             <table id="datatablesSimple">
                 <thead>
@@ -42,7 +42,7 @@
                             Id
                         </th>
                         <th>
-                            UserMame
+                            UserName
                         </th>
                         <th>
                             FirstName
@@ -62,29 +62,29 @@
                         <th></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody >
                     @foreach (var item in Model.Items)
                     {
                         <tr>
-                            <td>
+                            <td class="no-translate">
                                 @Html.DisplayFor(modelItem => item.Id)
                             </td>
-                            <td>
+                            <td class="no-translate">
                                 @Html.DisplayFor(modelItem => item.UserName)
                             </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FirstName)
+                            <td translate="no">
+                                <i class="no-translate"> @Html.DisplayFor(modelItem => item.FirstName)</i>
                             </td>
-                            <td>
+                            <td translate="no">
                                 @Html.DisplayFor(modelItem => item.LastName)
                             </td>
-                            <td>
+                            <td translate="no">
                                 @Html.DisplayFor(modelItem => item.Email)
                             </td>
-                            <td>
+                            <td translate="no">
                                 @Html.DisplayFor(modelItem => item.PhoneNumber)
                             </td>
-                            <td>
+                            <td translate="no">
                                 @Html.DisplayFor(modelItem => item.Dob)
                             </td>
                             <td>

@@ -134,7 +134,7 @@ namespace eShopSolution.AdminApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(UserVM user)
+        public async Task<IActionResult> Delete(UserViewModel user)
         {
             var result = await _userApiClient.DeleteUser(user.Id);
 

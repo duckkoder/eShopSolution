@@ -3,9 +3,9 @@ using System;
 
 namespace eShopSolution.ViewModels.System.Users
 {
-    public class UserVMValidator : AbstractValidator<UserVM>
+    public class UserViewModelValidator : AbstractValidator<UserViewModel>
     {
-        public UserVMValidator()
+        public UserViewModelValidator()
         {
             RuleFor(x => x.UserName)
                 .NotEmpty().WithMessage("{PropertyName} is required.")

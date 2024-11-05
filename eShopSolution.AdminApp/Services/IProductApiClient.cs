@@ -1,13 +1,10 @@
-﻿
-using eShopSolution.Data.Entities;
-using eShopSolution.ViewModels.Catalog.ProductImages;
+﻿using eShopSolution.ViewModels.Catalog.ProductImages;
 using eShopSolution.ViewModels.Catalog.Products;
 using eShopSolution.ViewModels.Common;
-using Microsoft.AspNetCore.Http;
 
-namespace eShopSolution.Application.Catalog.Products
+namespace eShopSolution.AdminApp.Services
 {
-    public interface IProductService
+    public interface IProductApiClient
     {
         Task<ApiResult<int>> Create(ProductCreateRequest request);
 

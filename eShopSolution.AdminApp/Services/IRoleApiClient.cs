@@ -5,6 +5,6 @@ namespace eShopSolution.AdminApp.Services
 {
     public interface IRoleApiClient
     {
-        public Task<ApiResult<List<RoleVM>>> GetAll();
+        public Task<ApiResult<List<RoleViewModel>>> GetAll();
     }
 }
