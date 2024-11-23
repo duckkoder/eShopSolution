@@ -6,7 +6,7 @@ namespace eShopSolution.AdminApp.Services
 {
     public interface IProductApiClient
     {
-        Task<ApiResult<int>> Create(ProductCreateRequest request);
+        Task<ApiResult<bool>> Create(ProductCreateRequest request);
 
         Task<ApiResult<bool>> Update(ProductUpdateRequest request);
 
@@ -20,7 +20,7 @@ namespace eShopSolution.AdminApp.Services
 
         Task<ApiResult<bool>> AddViewcount(int productId);
 
-        Task<ApiResult<PagedResult<ProductViewModel>>> GetAllPaging(GetManageProductPagingRequest request);
+        Task<ApiResult<PagedResult<ProductViewModel>>> GetAllByKeywordAndCatagoryId(GetManageProductPagingRequest request);
 
         Task<ApiResult<int>> AddImage(int productId, ProductImageCreateRequest request);
         Task<ApiResult<bool>> RemoveImage(int imageId);

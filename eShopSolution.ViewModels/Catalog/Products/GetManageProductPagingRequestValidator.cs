@@ -10,9 +10,6 @@ public class GetManageProductPagingRequestValidator : AbstractValidator<GetManag
 			.MaximumLength(200).WithMessage("Keyword cannot exceed 200 characters.");
 
 		// Xác thực CategoryIds: Nếu có giá trị, danh sách không được rỗng
-		RuleFor(x => x.CategoryIds)
-			.Must(categoryIds => categoryIds == null || categoryIds.Count > 0)
-			.WithMessage("At least one category must be selected.");
 		RuleFor(x => x.PageIndex)
 			.GreaterThanOrEqualTo(1).WithMessage("PageIndex must be greater than or equal to 1.");
 

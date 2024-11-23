@@ -5,8 +5,19 @@ public class ProductUpdateRequestValidator : AbstractValidator<ProductUpdateRequ
 {
 	public ProductUpdateRequestValidator()
 	{
-		// Xác thực Id: phải lớn hơn 0
-		RuleFor(x => x.Id)
+        RuleFor(x => x.Price)
+                .NotEmpty().WithMessage("Price is required.")
+                .GreaterThanOrEqualTo(0).WithMessage("Price must be a positive value.");
+
+        RuleFor(x => x.OriginalPrice)
+            .NotEmpty().WithMessage("Original Price is required.")
+            .GreaterThanOrEqualTo(0).WithMessage("Original Price must be a positive value.");
+
+        RuleFor(x => x.Stock)
+            .NotEmpty().WithMessage("Stock is required.")
+            .GreaterThanOrEqualTo(0).WithMessage("Stock must be a positive integer.");
+        // Xác thực Id: phải lớn hơn 0
+        RuleFor(x => x.Id)
 			.GreaterThan(0).WithMessage("Product Id must be greater than 0.");
 
 		// Xác thực Name: không được để trống và không vượt quá 200 ký tự
@@ -29,14 +40,5 @@ public class ProductUpdateRequestValidator : AbstractValidator<ProductUpdateRequ
 		// Xác thực SeoAlias: không được để trống
 		RuleFor(x => x.SeoAlias)
 			.NotEmpty().WithMessage("SEO Alias is required.");
-
-		// Xác thực LanguageId: không được để trống
-		RuleFor(x => x.LanguageId)
-			.NotEmpty().WithMessage("Language ID is required.");
-
-		// Xác thực ThumbnailImage: có thể null, nhưng nếu có thì phải là file hợp lệ
-		RuleFor(x => x.ThumbnailImage)
-			.Must(file => file == null || file.Length > 0)
-			.WithMessage("Thumbnail Image must be a valid file if provided.");
 	}
 }

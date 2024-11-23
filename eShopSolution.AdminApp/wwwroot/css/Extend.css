@@ -5,3 +5,12 @@ iframe {
     height: 0;
     display: none
 }
+/* Ẩn toàn bộ tiện ích dịch */
+#google_translate_element {
+    display: none;
+}
+
+    /* Hiển thị lại chỉ phần select box */
+    #google_translate_element select.goog-te-combo {
+        display: inline-block;
+    }

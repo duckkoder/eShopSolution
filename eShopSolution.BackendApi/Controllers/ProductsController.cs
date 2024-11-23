@@ -23,10 +23,10 @@ namespace eShopSolution.BackendApi.Controllers
 
 
 		[HttpGet("{languageId}")]
-		public async Task<IActionResult> get(string languageId)
+		public async Task<IActionResult> GetAll(string languageId)
 		{
 			var result = await _productService.GetAll(languageId);
-			if(result.IsSuccessed)
+			if(!result.IsSuccessed)
 			{
 				return BadRequest(result);
 			}
@@ -35,12 +35,25 @@ namespace eShopSolution.BackendApi.Controllers
 		}
 
 		[HttpGet("paging/{languageId}")]
-		public async Task<IActionResult> GetAllPaging([FromRoute] string languageId, [FromQuery] GetPublicProductPagingRequest request)
+		public async Task<IActionResult> GetAllByCatagoryId([FromRoute] string languageId, [FromQuery] GetPublicProductPagingRequest request)
 		{
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 			var result = await _productService.GetAllByCatagoryId(languageId, request);
-            if (result.IsSuccessed)
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+
+		[HttpGet("paging")]
+        public async Task<IActionResult> GetAllByKeywordAndCatagoryId([FromQuery] GetManageProductPagingRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var result = await _productService.GetAllPagingByKeywordAndatagoryId(request);
+            if (!result.IsSuccessed)
             {
                 return BadRequest(result);
             }
@@ -48,13 +61,14 @@ namespace eShopSolution.BackendApi.Controllers
         }
 
 
-		[HttpGet("{productId}/{languageId}")]
+
+        [HttpGet("{productId}/{languageId}")]
 
 		public async Task<IActionResult> GetById(int productId, string languageId)
 		{
 			var result = await _productService.GetById(productId, languageId);
 
-            if (result.IsSuccessed)
+            if (!result.IsSuccessed)
             {
                 return BadRequest(result);
             }
@@ -63,30 +77,26 @@ namespace eShopSolution.BackendApi.Controllers
 
 		[HttpPost]
         [Authorize]
-        public async Task<IActionResult> Create([FromQuery] ProductCreateRequest request)
+		[Consumes("multipart/form-data")]
+        public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
 		{
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
 			var result = await _productService.Create(request);
 		
+			/*var product = await _productService.GetById(result.ResultObj, request.LanguageId);
+			return CreatedAtAction(nameof(GetById), new { id = result.ResultObj }, product);*/
 
-			var product = await _productService.GetById(result.ResultObj, request.LanguageId);
-			return CreatedAtAction(nameof(GetById), new { id = result.ResultObj }, product);
+			return Ok(result);
 		}
 
 		[HttpPut]
-        [Authorize]
-        public async Task<IActionResult> Update([FromQuery] ProductUpdateRequest request)
+		[Authorize]
+        public async Task<IActionResult> Update([FromBody] ProductUpdateRequest request)
 		{
-			if (!ModelState.IsValid)
-				return BadRequest(ModelState);
-
 			var result = await _productService.Update(request);
-            if (!result.IsSuccessed)
-            {
-                return BadRequest(result);
-            }
+        
             return Ok(result);
 
         }

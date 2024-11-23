@@ -38,12 +38,6 @@ namespace eShopSolution.ViewModels.Catalog.Products
 
 			RuleFor(x => x.SeoAlias)
 				.NotEmpty().WithMessage("SEO Alias is required.");
-
-			RuleFor(x => x.LanguageId)
-				.NotEmpty().WithMessage("Language ID is required.");
-
-			RuleFor(x => x.ThumbnailImage)
-				.NotNull().WithMessage("Thumbnail Image is required.");
 		}
 	}
 }

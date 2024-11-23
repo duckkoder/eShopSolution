@@ -1,0 +1,65 @@
+﻿@using eShopSolution.ViewModels.Common;
+@model List<eShopSolution.ViewModels.Catalog.Products.ProductViewModel>
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+@section Scripts {
+    <script>
+        setTimeout(function () {
+            $('#msgAlert').fadeOut('slow');
+        }, 2000);
+    </script>
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">DataTable's Products</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active">Products</li>
+    </ol>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table mr-1"></i>
+            <a class="btn btn-success" asp-action="Create" asp-controller="Product">Create Product</a>
+        </div>
+        <div class="card-body">
+            @if (ViewBag.Message != null)
+            {
+                <div id="msgAlert" class="alert alert-success" role="alert">
+                    @ViewBag.Message
+                </div>
+            }
+            <table id="datatablesSimple">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Original Price</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="no-translate">@Html.DisplayFor(modelItem => item.Id)</td>
+                            <td class="no-translate">@Html.DisplayFor(modelItem => item.Name)</td>
+                            <td class="no-translate">@Html.DisplayFor(modelItem => item.OriginalPrice)</td>
+                            <td class="no-translate">@Html.DisplayFor(modelItem => item.Price)</td>
+                            <td class="no-translate">@Html.DisplayFor(modelItem => item.Stock)</td>
+                            <td>
+                                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
