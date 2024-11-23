@@ -164,7 +164,6 @@ namespace eShopSolution.Application.System.Users
             if (result.Succeeded)
             {
                 return new ApiSuccessResult<bool>().CreateMessage("Registration Successfully!");
-
             }
             return new ApiErrorResult<bool>("Registration failed!");
         }
