@@ -6,14 +6,15 @@
 }
 
 <div class="container-fluid">
-    <h1 class="mt-4">Xóa người dùng</h1>
+    <<h1 class="mt-4">Create</h1>
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
-        <li class="breadcrumb-item active">Delete user</li>
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item "> <a asp-action="Index" asp-controller="User">Users</a> </li>
+        <li class="breadcrumb-item active">Create</li>
     </ol>
     <div class="card mb-4">
         <div class="card-header">
-            <a class="btn btn-success" asp-action="Index" asp-controller="User">Về danh sách</a>
+            <a class="btn btn-success" asp-action="Index" asp-controller="User">Back To List's User</a>
         </div>
         <div class="card-body">
             <dl class="row">
@@ -57,7 +58,7 @@
         </div>
         <form asp-action="Delete" asp-controller="User" method="post">
             <input asp-for="Id" type="hidden" />
-            <input type="submit" value="Xóa" class="btn btn-danger" />
+            <input type="submit" value="Delete" class="btn btn-danger" />
         </form>
     </div>
 </div>

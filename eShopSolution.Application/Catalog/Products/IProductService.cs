@@ -11,6 +11,8 @@ namespace eShopSolution.Application.Catalog.Products
     {
         Task<ApiResult<int>> Create(ProductCreateRequest request);
 
+        
+
         Task<ApiResult<bool>> Update(ProductUpdateRequest request);
 
         Task<ApiResult<bool>> Delete(int productId);
@@ -23,7 +25,7 @@ namespace eShopSolution.Application.Catalog.Products
 
         Task<ApiResult<bool>> AddViewcount(int productId);
 
-        Task<ApiResult<PagedResult<ProductViewModel>>> GetAllPaging(GetManageProductPagingRequest request);
+        Task<ApiResult<PagedResult<ProductViewModel>>> GetAllPagingByKeywordAndatagoryId(GetManageProductPagingRequest request);
 
         Task<ApiResult<int>> AddImage(int productId, ProductImageCreateRequest request);
         Task<ApiResult<bool>> RemoveImage(int imageId);

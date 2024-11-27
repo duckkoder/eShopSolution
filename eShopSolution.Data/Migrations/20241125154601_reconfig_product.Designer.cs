@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eShopSolution.Data.EF;
 
@@ -11,9 +12,11 @@ using eShopSolution.Data.EF;
 namespace eShopSolution.Data.Migrations
 {
     [DbContext(typeof(EShopDbContext))]
-    partial class EShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241125154601_reconfig_product")]
+    partial class reconfig_product
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -288,7 +291,7 @@ namespace eShopSolution.Data.Migrations
                         {
                             Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "cb897e03-8a21-4e50-8c30-6028c8b0f10e",
+                            ConcurrencyStamp = "d5f1d43f-054e-4c95-ad80-a2672373900c",
                             Dob = new DateTime(2020, 1, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "tedu.international@gmail.com",
                             EmailConfirmed = true,
@@ -297,43 +300,12 @@ namespace eShopSolution.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "tedu.international@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAIAAYagAAAAELUEULSAaY+NjYSfAi3MAI66uNZ29L5TRbc8UwpdY3b06TP3BG8xQ25xrBq66+O/2w==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBo4OEM+z4FxubnEKD3sxmf1tSfEi7go9/9hdpNN1RHzrdpinObjkS8MFXe+GLCPDw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
-                });
-
-            modelBuilder.Entity("eShopSolution.Data.Entities.Brand", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<long>("FileSize")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("ImagePath")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Brands", (string)null);
                 });
 
             modelBuilder.Entity("eShopSolution.Data.Entities.Cart", b =>
@@ -644,9 +616,6 @@ namespace eShopSolution.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("BrandId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
@@ -666,9 +635,10 @@ namespace eShopSolution.Data.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(0);
 
-                    b.HasKey("Id");
+                    b.Property<string>("brand")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("BrandId");
+                    b.HasKey("Id");
 
                     b.ToTable("Products", (string)null);
 
@@ -676,7 +646,7 @@ namespace eShopSolution.Data.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2024, 11, 27, 16, 15, 15, 508, DateTimeKind.Local).AddTicks(6690),
+                            DateCreated = new DateTime(2024, 11, 25, 22, 46, 0, 509, DateTimeKind.Local).AddTicks(6691),
                             OriginalPrice = 100000m,
                             Price = 200000m,
                             Stock = 0,
@@ -1033,16 +1003,6 @@ namespace eShopSolution.Data.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("eShopSolution.Data.Entities.Product", b =>
-                {
-                    b.HasOne("eShopSolution.Data.Entities.Brand", "Brand")
-                        .WithMany("Products")
-                        .HasForeignKey("BrandId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Brand");
-                });
-
             modelBuilder.Entity("eShopSolution.Data.Entities.ProductImage", b =>
                 {
                     b.HasOne("eShopSolution.Data.Entities.Product", "product")
@@ -1110,11 +1070,6 @@ namespace eShopSolution.Data.Migrations
                     b.Navigation("Orders");
 
                     b.Navigation("Transactions");
-                });
-
-            modelBuilder.Entity("eShopSolution.Data.Entities.Brand", b =>
-                {
-                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("eShopSolution.Data.Entities.Category", b =>
