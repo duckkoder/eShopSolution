@@ -136,7 +136,7 @@ namespace eShopSolution.Application.Catalog.Products
             var data = await query.Select(x => new ProductViewModel()
             {
                 Id = x.p.Id,
-                Name = x.pt.Name,
+                Name = x.pt.Name,   
                 DateCreated = x.p.DateCreated,
                 Description = x.pt.Description,
                 Details = x.pt.Details,
@@ -154,6 +154,7 @@ namespace eShopSolution.Application.Catalog.Products
             return new ApiSuccessResult<List<ProductViewModel>>(data);
         }
 
+       
         public async Task<ApiResult<PagedResult<ProductViewModel>>> GetAllByCatagoryId(string LanguageId, GetPublicProductPagingRequest request)
         {
             var query = from p in _context.Products
