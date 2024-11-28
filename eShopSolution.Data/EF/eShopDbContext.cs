@@ -34,6 +34,7 @@ namespace eShopSolution.Data.EF
 			modelBuilder.ApplyConfiguration(new PromotionConfiguration());
 			modelBuilder.ApplyConfiguration(new TransactionConfiguration());
 			modelBuilder.ApplyConfiguration(new ProductImageConfiguration());
+			modelBuilder.ApplyConfiguration(new BrandConfiguration());
 			//configure for IdentityContext (Authentication)
 			modelBuilder.ApplyConfiguration(new AppUserConfiguration());
 			modelBuilder.ApplyConfiguration(new AppRoleConfiguration());
@@ -58,6 +59,7 @@ namespace eShopSolution.Data.EF
 
 		public DbSet<AppConfig> AppConfigs { get; set; }
 
+		public DbSet<Brand> Brands { get; set; }
 
 		public DbSet<Cart> Carts { get; set; }
 

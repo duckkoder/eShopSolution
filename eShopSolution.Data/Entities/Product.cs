@@ -6,6 +6,8 @@ namespace eShopSolution.Data.Entities
 	{
 		public int Id { get; set; }
 
+		public int ?BrandId { get; set; }
+
 		public decimal Price { get; set; }
 
 		public decimal OriginalPrice { get; set; }
@@ -15,6 +17,7 @@ namespace eShopSolution.Data.Entities
 		public int ViewCount { get; set; }
 
 		public DateTime DateCreated { get; set; }
+		public Brand Brand { get; set; }
 		public List<ProductInCategory> ProductInCategories { get; set; }
 
 		public List<OrderDetail> OrderDetails { get; set; }

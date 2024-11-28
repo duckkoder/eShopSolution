@@ -18,6 +18,7 @@ namespace eShopSolution.Data.Configurations
 			builder.HasKey(x => x.Id);
 			builder.Property(x => x.Id).UseIdentityColumn();
 
+			builder.Property(x => x.BrandId);
 
 			builder.Property(x => x.Price).IsRequired();
 
@@ -27,6 +28,8 @@ namespace eShopSolution.Data.Configurations
 
 			builder.Property(x => x.ViewCount).IsRequired().HasDefaultValue(0);
 
-		}
-	}
+            builder.HasOne(x => x.Brand).WithMany(x => x.Products).HasForeignKey(x => x.BrandId).OnDelete(DeleteBehavior.Cascade); ;
+		
+        }
+    }
 }

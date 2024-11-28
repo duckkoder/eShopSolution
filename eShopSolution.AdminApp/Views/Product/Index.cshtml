@@ -25,16 +25,19 @@
             <a class="btn btn-success" asp-action="Create" asp-controller="Product">Create Product</a>
         </div>
         <div class="card-body">
-            @if (ViewBag.Message != null)
+            @if (ViewBag.message != null)
             {
                 <div id="msgAlert" class="alert alert-success" role="alert">
-                    @ViewBag.Message
+                    <div class="row">
+                        @ViewBag.message
+                    </div>
                 </div>
             }
             <table id="datatablesSimple">
                 <thead>
                     <tr>
                         <th>Id</th>
+                        <th>Brand</th>
                         <th>Name</th>
                         <th>Original Price</th>
                         <th>Price</th>
@@ -47,6 +50,7 @@
                     {
                         <tr>
                             <td class="no-translate">@Html.DisplayFor(modelItem => item.Id)</td>
+                            <td class="no-translate">@Html.DisplayFor(modelItem => item.brand)</td>
                             <td class="no-translate">@Html.DisplayFor(modelItem => item.Name)</td>
                             <td class="no-translate">@Html.DisplayFor(modelItem => item.OriginalPrice)</td>
                             <td class="no-translate">@Html.DisplayFor(modelItem => item.Price)</td>

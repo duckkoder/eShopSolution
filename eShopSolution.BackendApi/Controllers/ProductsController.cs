@@ -205,5 +205,10 @@ namespace eShopSolution.BackendApi.Controllers
 				return BadRequest(result);
 			return Ok(result);
 		}
+
+
+		//brand
+
+		
 	}
 }

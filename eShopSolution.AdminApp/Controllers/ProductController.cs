@@ -63,6 +63,7 @@ namespace eShopSolution.AdminApp.Controllers
                 var product = result.ResultObj;
                 var request = new ProductUpdateRequest() { 
                     Description = product.Description,
+                    brand = product.brand,
                     Name = product.Name,
                     Details = product.Details,  
                     Id = product.Id,
@@ -80,6 +81,8 @@ namespace eShopSolution.AdminApp.Controllers
         }
 
         [HttpPost]
+        [Consumes("multipart/form-data")]
+
         public async Task<IActionResult> Edit (ProductUpdateRequest request)
         {
 
@@ -91,9 +94,9 @@ namespace eShopSolution.AdminApp.Controllers
             if (result.IsSuccessed)
             {
                 TempData["message"] = result.Message;
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","Product");
             }
-
+            ModelState.AddModelError("", result.Message);
             return View(request);
         }
         [HttpGet]

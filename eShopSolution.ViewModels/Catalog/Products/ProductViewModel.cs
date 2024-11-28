@@ -10,6 +10,7 @@ namespace eShopSolution.ViewModels.Catalog.Products
 	{
 		public int Id { get; set; }
 		public decimal Price { get; set; }
+		public string ?brand { get; set; }
 		public decimal OriginalPrice { get; set; }
 		public int Stock { get; set; }
 		public int ViewCount { get; set; }
