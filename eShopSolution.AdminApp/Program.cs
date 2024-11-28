@@ -33,13 +33,14 @@ namespace eShopSolution.AdminApp
                 mvcBuilder.AddRazorRuntimeCompilation();
             }
 
-
             // Add services to the container.
 
             builder.Services.AddTransient<IUserApiClient, UserApiClient>();
             builder.Services.AddTransient<IRoleApiClient, RoleApiClient>();
             builder.Services.AddTransient<ILanguageApiClient, LanguageApiClient>();
             builder.Services.AddTransient<IProductApiClient, ProductApiClient>();
+            builder.Services.AddTransient<IBrandApiClient, BrandApiClient>();
+
 
 
             builder.Services.AddControllersWithViews()

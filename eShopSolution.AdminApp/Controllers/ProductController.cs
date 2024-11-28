@@ -81,6 +81,8 @@ namespace eShopSolution.AdminApp.Controllers
         }
 
         [HttpPost]
+        [Consumes("multipart/form-data")]
+
         public async Task<IActionResult> Edit (ProductUpdateRequest request)
         {
 
