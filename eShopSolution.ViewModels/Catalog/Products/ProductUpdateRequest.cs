@@ -10,7 +10,7 @@ namespace eShopSolution.ViewModels.Catalog.Products
 		public int Id { get; set; }
 		public string Name { set; get; }
 
-		public string ?brand { set; get; }
+		public int BrandId { set; get; }
 		public string Description { set; get; }
 		public string Details { set; get; }
 		public string SeoDescription { set; get; }

@@ -1,4 +1,5 @@
 using eShopSolution.Application.Catalog.Brands;
+using eShopSolution.Application.Catalog.Categories;
 using eShopSolution.Application.Catalog.Products;
 using eShopSolution.Application.Common;
 using eShopSolution.Application.System.Languages;
@@ -52,6 +53,7 @@ namespace eShopSolution.BackendApi
             builder.Services.AddTransient<IRoleService, RoleService>();
 			builder.Services.AddTransient<ILanguageService, LanguageService>();
             builder.Services.AddTransient<IBrandService, BrandService>();
+			builder.Services.AddTransient<ICategoryService, CategoryService>();
 
 
 

@@ -182,9 +182,9 @@ namespace eShopSolution.AdminApp.Controllers
           
             foreach (var role in roleObj.ResultObj)
             {
-                roleAssignRequest.Roles.Add(new SelectedRole()
+                roleAssignRequest.Roles.Add(new SelectedItem()
                 {
-                    Id = role.Id,
+                    Id = role.Id.ToString(),
                     Name = role.Name,
                     IsSelected = userObj.ResultObj.Roles.Contains(role.Name),
                     Description = role.Description
