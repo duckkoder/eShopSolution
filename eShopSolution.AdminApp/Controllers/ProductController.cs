@@ -11,12 +11,16 @@ namespace eShopSolution.AdminApp.Controllers
     {
         private readonly IProductApiClient _productApiClient;
         private readonly IConfiguration _configuration;
+        private readonly IBrandApiClient _brandApiClient;
+        private readonly ICategoryApiClient _categoryApiClient;
 
         public ProductController(IProductApiClient productApiClient,
-            IConfiguration configuration)
+            IConfiguration configuration, IBrandApiClient brandApiClient, ICategoryApiClient categoryApiClient)
         {
             _configuration = configuration;
             _productApiClient = productApiClient;
+            _brandApiClient = brandApiClient;
+            _categoryApiClient = categoryApiClient;
         }
 
         public async Task<IActionResult> Index()
@@ -25,13 +29,19 @@ namespace eShopSolution.AdminApp.Controllers
 
             var result = await _productApiClient.GetAll(languageId);
 
-            
             return View(result.ResultObj);
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var result = await _brandApiClient.GetAll();
+
+            if (!result.IsSuccessed)
+                return BadRequest(result);
+
+            ViewBag.Brands = result.ResultObj;
+
             return View();
         }
 
@@ -63,8 +73,8 @@ namespace eShopSolution.AdminApp.Controllers
                 var product = result.ResultObj;
                 var request = new ProductUpdateRequest() { 
                     Description = product.Description,
-                    brand = product.brand,
                     Name = product.Name,
+                    BrandId = product.BrandId,
                     Details = product.Details,  
                     Id = product.Id,
                     LanguageId = languageId,
@@ -81,6 +91,8 @@ namespace eShopSolution.AdminApp.Controllers
         }
 
         [HttpPost]
+        [Consumes("multipart/form-data")]
+
         public async Task<IActionResult> Edit (ProductUpdateRequest request)
         {
 
@@ -125,6 +137,53 @@ namespace eShopSolution.AdminApp.Controllers
             TempData["message"] = result.Message;
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> CategoryAssign(int id)
+        {
+            var categoryAssignRequest = await GetCategoryAssignRequest(id);
+            return View(categoryAssignRequest);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CategoryAssign(CategoryAssignRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View();
+
+            var result = await _productApiClient.CategoryAssign(request.Id, request);
+
+            if (result.IsSuccessed)
+            {
+                TempData["result"] = "Cập nhật danh mục thành công";
+                return RedirectToAction("Index");
+            }
+
+            ModelState.AddModelError("", result.Message);
+            var roleAssignRequest = await GetCategoryAssignRequest(request.Id);
+
+            return View(roleAssignRequest);
+        }
+
+        private async Task<CategoryAssignRequest> GetCategoryAssignRequest(int id)
+        {
+            var languageId = HttpContext.Session.GetString(SystemConstants.AppSettings.DefaultLanguageID);
+
+            var productObj = await _productApiClient.GetById(id, languageId);
+            var categories = await _categoryApiClient.GetAll(languageId);
+            var categoryAssignRequest = new CategoryAssignRequest();
+            foreach (var c in categories)
+            {
+                categoryAssignRequest.Categories.Add(new SelectedItem()
+                {
+                    Id = c.Id.ToString(),
+                    Name = c.Name,
+                    IsSelected = productObj.ResultObj.Categories.Contains(c.Name)
+                });
+            }
+            return categoryAssignRequest;
+        }
+
 
 
     }

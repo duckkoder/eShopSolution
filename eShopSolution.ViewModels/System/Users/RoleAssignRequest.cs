@@ -10,6 +10,6 @@ namespace eShopSolution.ViewModels.System.Users
     public class RoleAssignRequest
     {
         public Guid id {  get; set; }
-        public List<SelectedRole> Roles { get; set; } = new List<SelectedRole>();
+        public List<SelectedItem> Roles { get; set; } = new List<SelectedItem>();
     }
 }

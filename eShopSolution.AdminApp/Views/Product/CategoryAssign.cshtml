@@ -1,0 +1,55 @@
+﻿@model eShopSolution.ViewModels.Catalog.Products.CategoryAssignRequest
+
+@{
+    ViewData["Title"] = "Category Assign";
+}
+
+<div class="container-fluid">
+    <h1 class="mt-4">Category Assign</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item "> <a asp-action="Index" asp-controller="Product">Products</a> </li>
+        <li class="breadcrumb-item active">Category Assign</li>
+    </ol>
+    <div class="card mb-4">
+        <div class="card-header">
+            <a class="btn btn-success" asp-action="Index" asp-controller="Product">Back To List's Product</a>
+        </div>
+        <div class="card-body">
+            <form asp-action="CategoryAssign" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Role's name</th>
+                            <th> </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Categories.Count; i++)
+                        {
+                            <tr>
+                                <td class="notranslate">
+                                    @Model.Categories[i].Name
+                                </td>
+                             
+                                <td class="text-center">
+                                    <div class="form-group">
+                                        <input type="checkbox" asp-for="Categories[i].IsSelected" />
+                                        <input type="hidden" asp-for="Categories[i].Id" />
+                                        <input type="hidden" asp-for="Categories[i].Name" />
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>

@@ -38,5 +38,7 @@ namespace eShopSolution.Application.Catalog.Products
 
         Task<ApiResult<List<ProductViewModel>>> GetAll(string id);
 
+        Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request);
+
     }
 }

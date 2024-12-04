@@ -288,7 +288,7 @@ namespace eShopSolution.Data.Migrations
                         {
                             Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "cb897e03-8a21-4e50-8c30-6028c8b0f10e",
+                            ConcurrencyStamp = "22361383-ee0b-4736-9799-9bd771c91c81",
                             Dob = new DateTime(2020, 1, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "tedu.international@gmail.com",
                             EmailConfirmed = true,
@@ -297,7 +297,7 @@ namespace eShopSolution.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "tedu.international@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAIAAYagAAAAELUEULSAaY+NjYSfAi3MAI66uNZ29L5TRbc8UwpdY3b06TP3BG8xQ25xrBq66+O/2w==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEN2z7wJ8+bizD9vIqk08ZydvtfbIiZ0E8yEVtfNnrAc3YXlhnLcYfAxFgcqhksgZtQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -676,7 +676,7 @@ namespace eShopSolution.Data.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2024, 11, 27, 16, 15, 15, 508, DateTimeKind.Local).AddTicks(6690),
+                            DateCreated = new DateTime(2024, 12, 4, 9, 44, 23, 761, DateTimeKind.Local).AddTicks(6261),
                             OriginalPrice = 100000m,
                             Price = 200000m,
                             Stock = 0,
@@ -744,6 +744,26 @@ namespace eShopSolution.Data.Migrations
                             CategoryId = 1,
                             ProductId = 1
                         });
+                });
+
+            modelBuilder.Entity("eShopSolution.Data.Entities.ProductSize", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SizeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.HasKey("ProductId", "SizeId");
+
+                    b.HasIndex("SizeId");
+
+                    b.ToTable("ProductSizes");
                 });
 
             modelBuilder.Entity("eShopSolution.Data.Entities.ProductTranslation", b =>
@@ -866,6 +886,26 @@ namespace eShopSolution.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Promotions", (string)null);
+                });
+
+            modelBuilder.Entity("eShopSolution.Data.Entities.Size", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Sizes");
                 });
 
             modelBuilder.Entity("eShopSolution.Data.Entities.Transaction", b =>
@@ -1073,6 +1113,25 @@ namespace eShopSolution.Data.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("eShopSolution.Data.Entities.ProductSize", b =>
+                {
+                    b.HasOne("eShopSolution.Data.Entities.Product", "Product")
+                        .WithMany("ProductSizes")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("eShopSolution.Data.Entities.Size", "Size")
+                        .WithMany("ProductSizes")
+                        .HasForeignKey("SizeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Size");
+                });
+
             modelBuilder.Entity("eShopSolution.Data.Entities.ProductTranslation", b =>
                 {
                     b.HasOne("eShopSolution.Data.Entities.Language", "Language")
@@ -1144,9 +1203,16 @@ namespace eShopSolution.Data.Migrations
 
                     b.Navigation("ProductInCategories");
 
+                    b.Navigation("ProductSizes");
+
                     b.Navigation("ProductTranslations");
 
                     b.Navigation("productImages");
+                });
+
+            modelBuilder.Entity("eShopSolution.Data.Entities.Size", b =>
+                {
+                    b.Navigation("ProductSizes");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,0 +1,60 @@
+﻿@model eShopSolution.ViewModels.Catalog.Brands.BrandViewModel
+
+
+@{
+    ViewData["Title"] = "Delete Brand";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">DataTable's Brands</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item">Brands</li>
+        <li class="breadcrumb-item active">Delete</li>
+
+    </ol>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table mr-1"></i>
+            <a class="btn btn-success" asp-action="Index" asp-controller="Brand">Back To List's Brand</a>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Id)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Id)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Name)
+
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Description)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Description)
+
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.imagePath)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.imagePath)
+                </dd>
+            </dl>
+
+            <form asp-action="Delete" asp-controller="Brand" method="post">
+                <input asp-for="imagePath" type="hidden" />
+                <input asp-for="Description" type="hidden" />
+                <input asp-for="Name" type="hidden" />
+                <input asp-for="Id" type="hidden" />
+                <input type="submit" value="Delete" class="btn btn-danger" /> 
+            </form>
+        </div>
+    </div>
+</div>

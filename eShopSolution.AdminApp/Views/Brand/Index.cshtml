@@ -1,0 +1,81 @@
+﻿@model List<eShopSolution.ViewModels.Catalog.Brands.BrandViewModel>
+
+
+@{
+    ViewData["Title"] = "Brands";
+}
+
+@section Scripts {
+    <script>
+        setTimeout(function () {
+            $('#msgAlert').fadeOut('slow');
+        }, 2000);
+    </script>
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">DataTable's Brands</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active">Brands</li>
+    </ol>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table mr-1"></i>
+            <a class="btn btn-success" asp-action="Create" asp-controller="Brand">Create Brand</a>
+        </div>
+        <div class="card-body">
+            @if (ViewBag.message != null)
+            {
+                <div id="msgAlert" class="alert alert-success" role="alert">
+                    <div class="row">
+                        @ViewBag.message
+                    </div>
+                </div>
+            }
+            <table id="datatablesSimple">
+                <thead>
+                    <tr>
+                        <th>
+                            Id
+                        </th>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Description
+                        </th>
+                        <th>
+                           imagePath
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.imagePath)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Edit", "Edit", new {  id=item.Id  }) |      
+                                @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

@@ -6,4 +6,18 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\.sass-cache\3fcd99d0c8b91f50f06b0715ce73ad297a6fc258\_base.scssc" />
+    <None Include="wwwroot\.sass-cache\3fcd99d0c8b91f50f06b0715ce73ad297a6fc258\_mixins.scssc" />
+    <None Include="wwwroot\.sass-cache\3fcd99d0c8b91f50f06b0715ce73ad297a6fc258\_variables.scssc" />
+    <None Include="wwwroot\.sass-cache\58d96aa2f3ca6831ea65d734678a63e337572170\style.scssc" />
+    <None Include="wwwroot\.sass-cache\8d96c3a14a0bb8e118b2f4f0ff234b926fa1678e\_buttons.scssc" />
+    <None Include="wwwroot\.sass-cache\8d96c3a14a0bb8e118b2f4f0ff234b926fa1678e\_responsive.scssc" />
+    <None Include="wwwroot\.sass-cache\8d96c3a14a0bb8e118b2f4f0ff234b926fa1678e\_sections.scssc" />
+    <None Include="wwwroot\.sass-cache\8d96c3a14a0bb8e118b2f4f0ff234b926fa1678e\_typography.scssc" />
+    <None Include="wwwroot\.sass-cache\ef29edb4d21face4cdada241cd6b836dafbe5b2a\_footer.scssc" />
+    <None Include="wwwroot\.sass-cache\ef29edb4d21face4cdada241cd6b836dafbe5b2a\_header.scssc" />
+    <None Include="wwwroot\.sass-cache\ef29edb4d21face4cdada241cd6b836dafbe5b2a\_nav.scssc" />
+  </ItemGroup>
+
 </Project>
