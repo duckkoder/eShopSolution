@@ -32,6 +32,7 @@ namespace eShopSolution.AdminApp.Services
         Task<ApiResult<PagedResult<ProductViewModel>>> GetAllByCatagoryId(string languageId, GetPublicProductPagingRequest request);
 
         Task<ApiResult<List<ProductViewModel>>> GetAll(string id);
+        Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request);
 
     }
 }

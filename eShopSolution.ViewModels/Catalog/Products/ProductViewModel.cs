@@ -10,7 +10,8 @@ namespace eShopSolution.ViewModels.Catalog.Products
 	{
 		public int Id { get; set; }
 		public decimal Price { get; set; }
-		public string ?brand { get; set; }
+		public int BrandId { get; set; }
+		public string BrandName { get; set; }
 		public decimal OriginalPrice { get; set; }
 		public int Stock { get; set; }
 		public int ViewCount { get; set; }
@@ -22,5 +23,6 @@ namespace eShopSolution.ViewModels.Catalog.Products
 		public string SeoTitle { set; get; }
 		public string SeoAlias { get; set; }
 		public string LanguageId { set; get; }
-	}
+        public List<string> ?Categories { get; set; } = new List<string>();
+    }
 }

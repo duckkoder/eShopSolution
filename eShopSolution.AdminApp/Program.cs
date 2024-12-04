@@ -40,6 +40,7 @@ namespace eShopSolution.AdminApp
             builder.Services.AddTransient<ILanguageApiClient, LanguageApiClient>();
             builder.Services.AddTransient<IProductApiClient, ProductApiClient>();
             builder.Services.AddTransient<IBrandApiClient, BrandApiClient>();
+            builder.Services.AddTransient<ICategoryApiClient, CategoryApiClient>();
 
 
 

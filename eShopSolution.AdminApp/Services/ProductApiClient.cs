@@ -59,6 +59,7 @@ namespace eShopSolution.AdminApp.Services
 
             requestContent.Add(new StringContent(request.Price.ToString()), "price");
             requestContent.Add(new StringContent(request.OriginalPrice.ToString()), "originalPrice");
+            requestContent.Add(new StringContent(request.BrandId.ToString()), "brandId");
 
 
             requestContent.Add(new StringContent(request.Stock.ToString()), "stock");
@@ -153,5 +154,16 @@ namespace eShopSolution.AdminApp.Services
         {
             throw new NotImplementedException();
         }
+
+        public async Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request)
+        {
+         
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            return await PutAsync<ApiResult<bool>>($"/api/products/{id}/categories", httpContent);
+
+        }
+
     }
 }
