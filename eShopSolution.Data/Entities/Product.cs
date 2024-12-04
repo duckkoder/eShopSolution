@@ -19,8 +19,9 @@ namespace eShopSolution.Data.Entities
 		public DateTime DateCreated { get; set; }
 		public Brand Brand { get; set; }
 		public List<ProductInCategory> ProductInCategories { get; set; }
+        public ICollection<ProductSize> ProductSizes { get; set; } = null!;
 
-		public List<OrderDetail> OrderDetails { get; set; }
+        public List<OrderDetail> OrderDetails { get; set; }
 
 		public List<Cart> Carts { get; set; }
 

@@ -35,8 +35,9 @@ namespace eShopSolution.Data.EF
 			modelBuilder.ApplyConfiguration(new TransactionConfiguration());
 			modelBuilder.ApplyConfiguration(new ProductImageConfiguration());
 			modelBuilder.ApplyConfiguration(new BrandConfiguration());
-			//configure for IdentityContext (Authentication)
-			modelBuilder.ApplyConfiguration(new AppUserConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductSizeConfiguration());
+            //configure for IdentityContext (Authentication)
+            modelBuilder.ApplyConfiguration(new AppUserConfiguration());
 			modelBuilder.ApplyConfiguration(new AppRoleConfiguration());
 
 			modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
@@ -55,7 +56,9 @@ namespace eShopSolution.Data.EF
 		}
 
 		public DbSet<Product> Products { get; set; }
-		public DbSet<Category> Categories { get; set; }
+        public DbSet<Size> Sizes { get; set; } = null!;
+        public DbSet<ProductSize> ProductSizes { get; set; } = null!;
+        public DbSet<Category> Categories { get; set; }
 
 		public DbSet<AppConfig> AppConfigs { get; set; }
 
