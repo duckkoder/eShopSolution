@@ -20,7 +20,6 @@ namespace eShopSolution.ViewModels.Catalog.Products
 		public string LanguageId { set; get; }
         public decimal Price { set; get; }
         public decimal OriginalPrice { set; get; }
-        public int Stock { set; get; }
         public IFormFile ?ThumbnailImage { get; set; }
 
 	}

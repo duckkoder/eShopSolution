@@ -19,10 +19,6 @@ namespace eShopSolution.ViewModels.Catalog.Products
 				.NotEmpty().WithMessage("Original Price is required.")
 				.GreaterThanOrEqualTo(0).WithMessage("Original Price must be a positive value.");
 
-			RuleFor(x => x.Stock)
-				.NotEmpty().WithMessage("Stock is required.")
-				.GreaterThanOrEqualTo(0).WithMessage("Stock must be a positive integer."); 
-
 			RuleFor(x => x.Name)
 				.NotEmpty().WithMessage("Product Name is required.")
 				.MaximumLength(200).WithMessage("Product Name cannot exceed 200 characters.");

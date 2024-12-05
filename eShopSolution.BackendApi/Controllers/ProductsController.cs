@@ -76,7 +76,7 @@ namespace eShopSolution.BackendApi.Controllers
         }
 
 		[HttpPost]
-        [Authorize]
+        /*[Authorize]*/
 		[Consumes("multipart/form-data")]
         public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
 		{
@@ -130,6 +130,8 @@ namespace eShopSolution.BackendApi.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
+
+		
 
 
 
@@ -205,6 +207,32 @@ namespace eShopSolution.BackendApi.Controllers
 				return BadRequest(result);
 			return Ok(result);
 		}
+		//Size
+        [HttpGet("{productId}/quantity")]
+
+        public async Task<IActionResult> GetQuantity(int productId)
+        {
+            var result = await _productService.GetQuantity(productId);
+
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+
+        [HttpPut("{productId}/quantity")]
+        public async Task<IActionResult> UpdateQuantity(int productId, UpdateQuantityRequest request)
+        {
+            var result = await _productService.UpdateQuantity(request);
+
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+
 
         //category 
         [HttpPut("{id}/categories")]
