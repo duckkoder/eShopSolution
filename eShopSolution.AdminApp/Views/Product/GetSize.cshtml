@@ -1,44 +1,45 @@
-﻿@model eShopSolution.ViewModels.Catalog.Products.CategoryAssignRequest
+﻿@model eShopSolution.ViewModels.Catalog.Products.UpdateQuantityRequest
 
 @{
-    ViewData["Title"] = "Category Assign";
+    ViewData["Title"] = "Quatity";
 }
 
 <div class="container-fluid">
-    <h1 class="mt-4">Category Assign</h1>
+    <h1 class="mt-4">Quantity</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="/">Home</a></li>
         <li class="breadcrumb-item "> <a asp-action="Index" asp-controller="Product">Products</a> </li>
-        <li class="breadcrumb-item active">Category Assign</li>
+        <li class="breadcrumb-item active">Quantity</li>
     </ol>
     <div class="card mb-4">
         <div class="card-header">
             <a class="btn btn-success" asp-action="Index" asp-controller="Product">Back To List's Product</a>
         </div>
         <div class="card-body">
-            <form asp-action="CategoryAssign" method="post">
+            <form asp-action="GetSize" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="ProductId" />
                 <table class="table table-bordered">
                     <thead>
                         <tr class="text-center">
-                            <th>Role's name</th>
-                            <th> </th>
+                            <th>Size's name</th>
+                            <th>Quantity</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @for (int i = 0; i < Model.Categories.Count; i++)
+                        @for (int i = 0; i < Model.ProductSizes.Count; i++)
                         {
-                            <tr>
+                            <tr class="text-center">
                                 <td class="notranslate">
-                                    @Model.Categories[i].Name
+                                    @Model.ProductSizes[i].Name
                                 </td>
-                             
-                                <td class="text-center">
+
+                                <td >
                                     <div class="form-group">
-                                        <input type="checkbox" asp-for="Categories[i].IsSelected" />
-                                        <input type="hidden" asp-for="Categories[i].Id" />
-                                        <input type="hidden" asp-for="Categories[i].Name" />
+                                        <input type="number" asp-for="ProductSizes[i].Quantity" />
+                                        <input type="hidden" asp-for="ProductSizes[i].Id" />
+                                        <input type="hidden" asp-for="ProductSizes[i].Name" />
+
                                     </div>
                                 </td>
                             </tr>

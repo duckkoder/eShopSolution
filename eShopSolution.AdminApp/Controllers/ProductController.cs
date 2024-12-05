@@ -83,7 +83,6 @@ namespace eShopSolution.AdminApp.Controllers
                     SeoTitle = product.SeoTitle,
                     OriginalPrice = product.OriginalPrice,
                     Price = product.Price,
-                    Stock = product.Stock,
                 };
                 return View(request);
             }
@@ -184,7 +183,33 @@ namespace eShopSolution.AdminApp.Controllers
             return categoryAssignRequest;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetSize(int id)
+        {
+            var result = await _productApiClient.GetQuantity(id);
 
+            if (!result.IsSuccessed)
+            {
+                ModelState.AddModelError("", result.Message);
+                return RedirectToAction("Index");
+            }
+            var request = new UpdateQuantityRequest() { ProductId = id ,ProductSizes=result.ResultObj};
+
+            return View(request);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetSize(UpdateQuantityRequest request)
+        {
+            var result = await _productApiClient.UpdateQuantity(request.ProductId,request);
+
+            if (!result.IsSuccessed)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+            TempData["message"] = result.Message;
+            return RedirectToAction("Index");
+        }
 
     }
 }

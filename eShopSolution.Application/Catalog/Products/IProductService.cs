@@ -2,6 +2,7 @@
 using eShopSolution.Data.Entities;
 using eShopSolution.ViewModels.Catalog.ProductImages;
 using eShopSolution.ViewModels.Catalog.Products;
+using eShopSolution.ViewModels.Catalog.ProductSizes;
 using eShopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
 
@@ -39,6 +40,11 @@ namespace eShopSolution.Application.Catalog.Products
         Task<ApiResult<List<ProductViewModel>>> GetAll(string id);
 
         Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request);
+
+        Task<ApiResult<List<ProductSizeViewModel>>> GetQuantity(int Id);
+
+        Task<ApiResult<bool>> UpdateQuantity(UpdateQuantityRequest request);
+
 
     }
 }
