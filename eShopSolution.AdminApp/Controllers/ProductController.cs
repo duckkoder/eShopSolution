@@ -1,9 +1,8 @@
-﻿using eShopSolution.AdminApp.Services;
+﻿using APIServices;
 using eShopSolution.Utilities.Constants;
 using eShopSolution.ViewModels.Catalog.Products;
 using Microsoft.AspNetCore.Mvc;
 using eShopSolution.ViewModels.Common;
-using eShopSolution.ViewModels.System.Users;
 
 namespace eShopSolution.AdminApp.Controllers
 {
@@ -171,7 +170,7 @@ namespace eShopSolution.AdminApp.Controllers
             var productObj = await _productApiClient.GetById(id, languageId);
             var categories = await _categoryApiClient.GetAll(languageId);
             var categoryAssignRequest = new CategoryAssignRequest();
-            foreach (var c in categories)
+            foreach (var c in categories.ResultObj)
             {
                 categoryAssignRequest.Categories.Add(new SelectedItem()
                 {

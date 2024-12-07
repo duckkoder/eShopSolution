@@ -1,15 +1,11 @@
 using eShopSolution.AdminApp.Models;
 using eShopSolution.Utilities.Constants;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Xml.Linq;
 
 namespace eShopSolution.AdminApp.Controllers
 {
-	public class HomeController : BaseController
+    public class HomeController : BaseController
 	{
 		private readonly ILogger<HomeController> _logger;
 

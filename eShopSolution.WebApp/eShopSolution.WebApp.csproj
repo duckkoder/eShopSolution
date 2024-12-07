@@ -20,4 +20,9 @@
     <None Include="wwwroot\.sass-cache\ef29edb4d21face4cdada241cd6b836dafbe5b2a\_nav.scssc" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\APIServices\APIServices.csproj" />
+    <ProjectReference Include="..\eShopSolution.ViewModels\eShopSolution.ViewModels.csproj" />
+  </ItemGroup>
+
 </Project>

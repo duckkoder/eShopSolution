@@ -1,6 +1,7 @@
 ﻿using eShopSolution.Data.EF;
 using eShopSolution.Data.Entities;
 using eShopSolution.ViewModels.Catalog.Categories;
+using eShopSolution.ViewModels.Common;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -19,17 +20,20 @@ namespace eShopSolution.Application.Catalog.Categories
             _context = context;
         }
 
-        public async Task<List<CategoryViewModel>> GetAll(string languageId)
+      
+
+        public async Task<ApiResult<List<CategoryViewModel>>> GetAll(string languageId)
         {
             var query = from c in _context.Categories
                         join ct in _context.CategoryTranslations on c.Id equals ct.CategoryId
                         where ct.LanguageId == languageId
                         select new { c, ct };
-            return await query.Select(x => new CategoryViewModel()
+            var data = await query.Select(x => new CategoryViewModel()
             {
                 Id = x.c.Id,
                 Name = x.ct.Name
             }).ToListAsync();
+            return new ApiSuccessResult<List<CategoryViewModel>>(data);
         }
     }
 }

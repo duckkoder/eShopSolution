@@ -1,7 +1,5 @@
-﻿using eShopSolution.AdminApp.Services;
-using eShopSolution.Data.Entities;
+﻿using APIServices;
 using eShopSolution.ViewModels.Catalog.Brands;
-using eShopSolution.ViewModels.Catalog.Products;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eShopSolution.AdminApp.Controllers
