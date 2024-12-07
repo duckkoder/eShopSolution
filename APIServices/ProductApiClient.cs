@@ -1,26 +1,25 @@
-﻿using Azure;
-using Azure.Core;
-using eShopSolution.Data.Entities;
-using eShopSolution.Utilities.Constants;
+﻿using eShopSolution.Utilities.Constants;
 using eShopSolution.ViewModels.Catalog.ProductImages;
 using eShopSolution.ViewModels.Catalog.Products;
 using eShopSolution.ViewModels.Common;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
-using System.Net.Http;
-using System.Security.Policy;
 using System.Text;
+using eShopSolution.ViewModels.Catalog.ProductSizes;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 
-namespace eShopSolution.AdminApp.Services
+namespace APIServices
 {
-    public class ProductApiClient : ApiClientBase,IProductApiClient
+    public class ProductApiClient : ApiClientBase, IProductApiClient
     {
 
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
-        public ProductApiClient(IHttpClientFactory httpClientFactory,IConfiguration configuration,IHttpContextAccessor httpContextAccessor) 
-            : base(httpClientFactory,configuration,httpContextAccessor) { 
+        public ProductApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+            : base(httpClientFactory, configuration, httpContextAccessor)
+        {
             _httpContextAccessor = httpContextAccessor;
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
@@ -38,7 +37,7 @@ namespace eShopSolution.AdminApp.Services
             return await PutAsync<ApiResult<bool>>($"/api/products/ViewCount");
         }
 
-        public async Task<ApiResult<bool>> Create(ProductCreateRequest request)
+        public async Task<ApiResult<int>> Create(ProductCreateRequest request)
         {
             var sessions = _httpContextAccessor.HttpContext.Session.GetString(SystemConstants.AppSettings.Token);
             var client = _httpClientFactory.CreateClient();
@@ -61,8 +60,6 @@ namespace eShopSolution.AdminApp.Services
             requestContent.Add(new StringContent(request.OriginalPrice.ToString()), "originalPrice");
             requestContent.Add(new StringContent(request.BrandId.ToString()), "brandId");
 
-
-            requestContent.Add(new StringContent(request.Stock.ToString()), "stock");
             requestContent.Add(new StringContent(request.Name.ToString()), "name");
             requestContent.Add(new StringContent(request.Description.ToString()), "description");
 
@@ -73,11 +70,10 @@ namespace eShopSolution.AdminApp.Services
             requestContent.Add(new StringContent(languageId), "languageId");
 
             var response = await client.PostAsync($"/api/products/", requestContent);
-            
+
             var result = await response.Content.ReadAsStringAsync();
 
-            
-            return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+            return JsonConvert.DeserializeObject<ApiSuccessResult<int>>(result);
         }
 
         public async Task<ApiResult<bool>> Delete(int productId)
@@ -95,7 +91,7 @@ namespace eShopSolution.AdminApp.Services
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-            return await PostAsync<ApiResult<PagedResult<ProductViewModel>>> ($"/api/products/paging/{languageId}", httpContent);
+            return await PostAsync<ApiResult<PagedResult<ProductViewModel>>>($"/api/products/paging/{languageId}", httpContent);
         }
 
         public async Task<ApiResult<PagedResult<ProductViewModel>>> GetAllByKeywordAndCatagoryId(GetManageProductPagingRequest request)
@@ -133,11 +129,11 @@ namespace eShopSolution.AdminApp.Services
         }
 
         public async Task<ApiResult<bool>> Update(ProductUpdateRequest request)
-        {   
+        {
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-            return await PutAsync<ApiResult<bool>>($"/api/products",httpContent);
+            return await PutAsync<ApiResult<bool>>($"/api/products", httpContent);
         }
 
         public Task<ApiResult<bool>> UpdateImage(int imageId, ProductImageUpdateRequest request)
@@ -157,7 +153,7 @@ namespace eShopSolution.AdminApp.Services
 
         public async Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request)
         {
-         
+
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -165,5 +161,17 @@ namespace eShopSolution.AdminApp.Services
 
         }
 
+        public async Task<ApiResult<List<ProductSizeViewModel>>> GetQuantity(int id)
+        {
+            return await GetAsync<ApiResult<List<ProductSizeViewModel>>>($"/api/products/{id}/quantity");
+        }
+        public async Task<ApiResult<bool>> UpdateQuantity(int id, UpdateQuantityRequest request)
+        {
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            return await PutAsync<ApiResult<bool>>($"/api/products/{id}/quantity", httpContent);
+
+        }
     }
 }

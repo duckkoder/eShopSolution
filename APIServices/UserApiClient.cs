@@ -1,17 +1,13 @@
-﻿using eShopSolution.Utilities.Constants;
-using eShopSolution.ViewModels.Common;
+﻿using eShopSolution.ViewModels.Common;
 using eShopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using NuGet.Protocol.Plugins;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
-using System.Text.Json.Serialization;
 
-namespace eShopSolution.AdminApp.Services
+namespace APIServices
 {
-    public class UserApiClient : ApiClientBase,IUserApiClient
+    public class UserApiClient : ApiClientBase, IUserApiClient
     {
         public UserApiClient(IHttpClientFactory httpClientFactory,
                                  IConfiguration configuration,
@@ -25,18 +21,18 @@ namespace eShopSolution.AdminApp.Services
         {
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-            return await PostAsync<ApiResult<string>>("/api/users/authenticate", httpContent);   
+            return await PostAsync<ApiResult<string>>("/api/users/authenticate", httpContent);
         }
 
         public async Task<ApiResult<bool>> DeleteUser(Guid id)
         {
             return await DeleteAsync<ApiResult<bool>>($"/api/users/{id}");
-            
+
         }
 
         public async Task<ApiResult<UserViewModel>> GetById(Guid id)
         {
-            return  await GetAsync<ApiResult<UserViewModel>>($"/api/users/{id}");
+            return await GetAsync<ApiResult<UserViewModel>>($"/api/users/{id}");
         }
 
         public async Task<ApiResult<PagedResult<UserViewModel>>> GetUserPaging(GetUserPagingRequest request)
@@ -44,7 +40,7 @@ namespace eShopSolution.AdminApp.Services
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             return await PostAsync<ApiResult<PagedResult<UserViewModel>>>
-                ($"/api/users/paging",httpContent);
+                ($"/api/users/paging", httpContent);
         }
 
         public async Task<ApiResult<bool>> RegisterUser(RegisterRequest request)
@@ -67,7 +63,7 @@ namespace eShopSolution.AdminApp.Services
         {
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-            return  await PutAsync<ApiResult<bool>>($"/api/users/{id}", httpContent);
+            return await PutAsync<ApiResult<bool>>($"/api/users/{id}", httpContent);
         }
     }
 }

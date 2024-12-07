@@ -1,3 +1,5 @@
+using APIServices;
+
 namespace eShopSolution.WebApp
 {
 	public class Program
@@ -5,11 +7,31 @@ namespace eShopSolution.WebApp
 		public static void Main(string[] args)
 		{
 			var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddHttpClient();
 
-			// Add services to the container.
-			builder.Services.AddControllersWithViews();
+            // Add services to the container.
+            builder.Services.AddControllersWithViews();
 
-			var app = builder.Build();
+
+            builder.Services.AddTransient<IUserApiClient, UserApiClient>();
+            builder.Services.AddTransient<IRoleApiClient, RoleApiClient>();
+            builder.Services.AddTransient<ILanguageApiClient, LanguageApiClient>();
+            builder.Services.AddTransient<IProductApiClient, ProductApiClient>();
+            builder.Services.AddTransient<IBrandApiClient, BrandApiClient>();
+            builder.Services.AddTransient<ICategoryApiClient, CategoryApiClient>();
+
+
+            builder.Services.AddDistributedMemoryCache();
+
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+            });
+            //use HttpContextAccessor 
+            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+
+            var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
 			if (!app.Environment.IsDevelopment())
@@ -25,8 +47,9 @@ namespace eShopSolution.WebApp
 			app.UseRouting();
 
 			app.UseAuthorization();
+            app.UseSession();
 
-			app.MapControllerRoute(
+            app.MapControllerRoute(
 				name: "default",
 				pattern: "{controller=Home}/{action=Index}/{id?}");
 

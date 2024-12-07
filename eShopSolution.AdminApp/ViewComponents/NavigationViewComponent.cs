@@ -1,5 +1,5 @@
 ﻿using eShopSolution.AdminApp.Models;
-using eShopSolution.AdminApp.Services;
+using APIServices;
 using eShopSolution.Utilities.Constants;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;

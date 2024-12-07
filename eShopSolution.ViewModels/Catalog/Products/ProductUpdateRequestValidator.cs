@@ -13,9 +13,6 @@ public class ProductUpdateRequestValidator : AbstractValidator<ProductUpdateRequ
             .NotEmpty().WithMessage("Original Price is required.")
             .GreaterThanOrEqualTo(0).WithMessage("Original Price must be a positive value.");
 
-        RuleFor(x => x.Stock)
-            .NotEmpty().WithMessage("Stock is required.")
-            .GreaterThanOrEqualTo(0).WithMessage("Stock must be a positive integer.");
         // Xác thực Id: phải lớn hơn 0
         RuleFor(x => x.Id)
 			.GreaterThan(0).WithMessage("Product Id must be greater than 0.");

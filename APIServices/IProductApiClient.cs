@@ -1,12 +1,13 @@
 ﻿using eShopSolution.ViewModels.Catalog.ProductImages;
 using eShopSolution.ViewModels.Catalog.Products;
+using eShopSolution.ViewModels.Catalog.ProductSizes;
 using eShopSolution.ViewModels.Common;
 
-namespace eShopSolution.AdminApp.Services
+namespace APIServices
 {
     public interface IProductApiClient
     {
-        Task<ApiResult<bool>> Create(ProductCreateRequest request);
+        Task<ApiResult<int>> Create(ProductCreateRequest request);
 
         Task<ApiResult<bool>> Update(ProductUpdateRequest request);
 
@@ -33,6 +34,9 @@ namespace eShopSolution.AdminApp.Services
 
         Task<ApiResult<List<ProductViewModel>>> GetAll(string id);
         Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request);
+        Task<ApiResult<List<ProductSizeViewModel>>> GetQuantity(int id);
+        Task<ApiResult<bool>> UpdateQuantity(int id, UpdateQuantityRequest request);
+
 
     }
 }

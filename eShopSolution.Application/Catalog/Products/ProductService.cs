@@ -4,11 +4,13 @@ using eShopSolution.Data.Entities;
 using eShopSolution.Utilities.Exceptions;
 using eShopSolution.ViewModels.Catalog.ProductImages;
 using eShopSolution.ViewModels.Catalog.Products;
+using eShopSolution.ViewModels.Catalog.ProductSizes;
 using eShopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Headers;
+using System.Text.Json.Serialization.Metadata;
 
 namespace eShopSolution.Application.Catalog.Products
 {
@@ -61,31 +63,41 @@ namespace eShopSolution.Application.Catalog.Products
 
         public async Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request)
         {
-            var user = await _context.Products.FindAsync(id);
-            if (user == null)
+            var product = await _context.Products
+    .AsNoTracking() // Loại bỏ tracking để không vô tình thay đổi Product
+    .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (product == null)
             {
                 return new ApiErrorResult<bool>($"Cannot find a product: {id}!");
             }
+
+            // Xử lý việc assign category
             foreach (var category in request.Categories)
             {
                 var productInCategory = await _context.ProductInCategories
-                    .FirstOrDefaultAsync(x => x.CategoryId == int.Parse(category.Id)
-                    && x.ProductId == id);
-                if (productInCategory != null && category.IsSelected == false)
+                    .FirstOrDefaultAsync(x => x.CategoryId == int.Parse(category.Id) && x.ProductId == id);
+
+                if (!category.IsSelected)
                 {
-                    _context.ProductInCategories.Remove(productInCategory);
+                    if (productInCategory != null)
+                        _context.ProductInCategories.Remove(productInCategory);
                 }
-                else if (productInCategory == null && category.IsSelected)
+                else
                 {
-                    await _context.ProductInCategories.AddAsync(new ProductInCategory()
+                    if (productInCategory == null)
                     {
-                        CategoryId = int.Parse(category.Id),
-                        ProductId = id
-                    });
+                        await _context.ProductInCategories.AddAsync(new ProductInCategory()
+                        {
+                            CategoryId = int.Parse(category.Id),
+                            ProductId = id
+                        });
+                    }
                 }
+
             }
             await _context.SaveChangesAsync();
-            return new ApiSuccessResult<bool>();
+            return new ApiSuccessResult<bool>().CreateMessage("Update category Successful!");
         }
 
         public async Task<ApiResult<int>> Create(ProductCreateRequest request)
@@ -95,43 +107,60 @@ namespace eShopSolution.Application.Catalog.Products
                 Price = request.Price,
                 OriginalPrice = request.OriginalPrice,
                 BrandId = request.BrandId,
-                Stock = request.Stock,
+                Stock = 0,
                 ViewCount = 0,
                 DateCreated = DateTime.Now,
                 ProductTranslations = new List<ProductTranslation>()
-                {
-                    new ProductTranslation()
-                    {
-                        Name =  request.Name,
-                        Description = request.Description,
-                        Details = request.Details,
-                        SeoDescription = request.SeoDescription,
-                        SeoAlias = request.SeoAlias,
-                        SeoTitle = request.SeoTitle,
-                        LanguageId = request.LanguageId
-                    }
-                }
+        {
+            new ProductTranslation()
+            {
+                Name =  request.Name,
+                Description = request.Description,
+                Details = request.Details,
+                SeoDescription = request.SeoDescription,
+                SeoAlias = request.SeoAlias,
+                SeoTitle = request.SeoTitle,
+                LanguageId = request.LanguageId
+            }
+        }
             };
 
             if (request.ThumbnailImage != null)
             {
                 product.productImages = new List<ProductImage>()
-                {
-                    new ProductImage()
-                    {
-                        Caption = "Thumbnail image",
-                        DateCreated = DateTime.Now,
-                        FileSize = request.ThumbnailImage.Length,
-                        ImagePath = await this.SaveFile(request.ThumbnailImage),
-                        IsDefault = true,
-                        SortOrder = 1
-                    }
-                };
+        {
+            new ProductImage()
+            {
+                Caption = "Thumbnail image",
+                DateCreated = DateTime.Now,
+                FileSize = request.ThumbnailImage.Length,
+                ImagePath = await this.SaveFile(request.ThumbnailImage),
+                IsDefault = true,
+                SortOrder = 1
+            }
+        };
             }
 
+            // Lưu product trước để lấy Id
             _context.Products.Add(product);
+            await _context.SaveChangesAsync(); // Lưu trước để product.Id được tạo
+
+            // Thêm các ProductSizes với ProductId
+            for (int i = 1; i <= 6; i++)
+            {
+                _context.ProductSizes.Add(new ProductSize()
+                {
+                    SizeId = i,
+                    ProductId = product.Id, // Sử dụng Id đã được tạo
+                    Quantity = 0
+                });
+            }
+
+            // Lưu các ProductSizes
             if (await _context.SaveChangesAsync() > 0)
-                return new ApiSuccessResult<int>(product.Id).CreateMessage($"Create Successful Product Name {request.Name}").CreateMessage($"Create Successful Product Name {request.Name}");
+                return new ApiSuccessResult<int>(product.Id)
+                    .CreateMessage($"Create Successful Product Name {request.Name}");
+
             return new ApiErrorResult<int>($"Create Unsuccessful Product Name {request.Name}!");
         }
 
@@ -158,11 +187,7 @@ namespace eShopSolution.Application.Catalog.Products
         {
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
-                        join br in _context.Brands on p.BrandId equals br.Id 
-                        join pic in _context.ProductInCategories on p.Id equals pic.ProductId into ppic
-                        from pic in ppic.DefaultIfEmpty()
-                        join c in _context.Categories on pic.CategoryId equals c.Id into picc
-                        from c in picc.DefaultIfEmpty()
+                        join br in _context.Brands on p.BrandId equals br.Id
                         where pt.LanguageId == languageId
                         select new { p, pt, br };
 
@@ -182,21 +207,20 @@ namespace eShopSolution.Application.Catalog.Products
                 SeoDescription = x.pt.SeoDescription,
                 SeoTitle = x.pt.SeoTitle,
                 Stock = x.p.Stock,
-                ViewCount = x.p.ViewCount,
-                Categories = new List<string>()
+                ViewCount = x.p.ViewCount
             }).ToListAsync();
 
 
             return new ApiSuccessResult<List<ProductViewModel>>(data);
         }
 
-       
+
         public async Task<ApiResult<PagedResult<ProductViewModel>>> GetAllByCatagoryId(string LanguageId, GetPublicProductPagingRequest request)
         {
 
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
-                        join br in _context.Brands on p.BrandId equals br.Id 
+                        join br in _context.Brands on p.BrandId equals br.Id
                         join pic in _context.ProductInCategories on p.Id equals pic.ProductId into ppic
                         from pic in ppic.DefaultIfEmpty()
                         join c in _context.Categories on pic.CategoryId equals c.Id into picc
@@ -248,7 +272,7 @@ namespace eShopSolution.Application.Catalog.Products
         {
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
-                        join br in _context.Brands on p.BrandId equals br.Id 
+                        join br in _context.Brands on p.BrandId equals br.Id
                         join pic in _context.ProductInCategories on p.Id equals pic.ProductId into ppic
                         from pic in ppic.DefaultIfEmpty()
                         join c in _context.Categories on pic.CategoryId equals c.Id into picc
@@ -308,7 +332,7 @@ namespace eShopSolution.Application.Catalog.Products
             && x.LanguageId == languageId);
 
             var categories = await (from c in _context.Categories
-                                    join ct in _context.CategoryTranslations on c.Id equals ct.CategoryId                  
+                                    join ct in _context.CategoryTranslations on c.Id equals ct.CategoryId
                                     join pic in _context.ProductInCategories on c.Id equals pic.CategoryId into picct
                                     from pic in picct.DefaultIfEmpty()
                                     where pic.ProductId == productId && ct.LanguageId == languageId
@@ -333,7 +357,7 @@ namespace eShopSolution.Application.Catalog.Products
                 ViewCount = product.ViewCount,
                 Categories = categories != null ? categories : new List<string>()
             };
-           
+
             return new ApiSuccessResult<ProductViewModel>(productViewModel);
         }
 
@@ -376,6 +400,21 @@ namespace eShopSolution.Application.Catalog.Products
             }).ToListAsync());
         }
 
+        public async Task<ApiResult<List<ProductSizeViewModel>>> GetQuantity(int Id)
+        {
+            var productSizes = await (from PS in _context.ProductSizes
+                                      join S in _context.Sizes on PS.SizeId equals S.Id
+                                      where PS.ProductId == Id
+                                      select (new ProductSizeViewModel
+                                      {
+                                          Id = S.Id,
+                                          Name = S.Name,
+                                          Quantity = PS.Quantity
+                                      })).ToListAsync();
+
+            return new ApiSuccessResult<List<ProductSizeViewModel>>(productSizes);
+        }
+
         public async Task<ApiResult<bool>> RemoveImage(int imageId)
         {
             var productImage = await _context.ProductImages.Where(x => x.Id == imageId).FirstOrDefaultAsync();
@@ -399,8 +438,7 @@ namespace eShopSolution.Application.Catalog.Products
             if (product == null || productTranslation == null)
                 return new ApiErrorResult<bool>($"Cannot find a product: {request.Id}");
 
-            product.Stock= request.Stock;
-            product.Price= request.Price;
+            product.Price = request.Price;
             product.OriginalPrice = request.OriginalPrice;
             productTranslation.Name = request.Name;
             productTranslation.Description = request.Description;
@@ -457,15 +495,32 @@ namespace eShopSolution.Application.Catalog.Products
             return new ApiErrorResult<bool>($"Update Price UnSuccessful For Product Image ID {productId}!");
         }
 
+        public async Task<ApiResult<bool>> UpdateQuantity(UpdateQuantityRequest request)
+        {
+            var product = await _context.Products.FindAsync(request.ProductId);
+            if (product == null)
+                return new ApiErrorResult<bool>($"Cannot find a product: {request.ProductId}");
+            int quantity = 0;
+            for (int i = 1; i <= 6; i++)
+            {
+               var size =  await _context.ProductSizes.FindAsync(request.ProductId, i);
+                size.Quantity = request.ProductSizes.Where(x=>x.Id==i).Select(request=>request.Quantity).Sum(); 
+                quantity+= size.Quantity;
+            }
+            product.Stock = quantity;
 
+            if (await _context.SaveChangesAsync() > 0)
+                return new ApiSuccessResult<bool>().CreateMessage($"Update Quantity Successful For Product ID {request.ProductId}!");
+            return new ApiErrorResult<bool>($"Update Quantity UnSuccessful For Product Image ID {request.ProductId}!");
+        }
 
-        public async Task<ApiResult< bool>> UpdateStock(int productId, int addedQuantity)
+        public async Task<ApiResult<bool>> UpdateStock(int productId, int addedQuantity)
         {
             var product = await _context.Products.FindAsync(productId);
             if (product == null)
                 return new ApiErrorResult<bool>($"Cannot find a product: {productId}");
             product.Stock += addedQuantity;
-            if(await _context.SaveChangesAsync() > 0)
+            if (await _context.SaveChangesAsync() > 0)
                 return new ApiSuccessResult<bool>().CreateMessage($"Update Stock Successful For Product ID {productId}!");
             return new ApiErrorResult<bool>($"Update Price UnSuccessful For Product Image ID {productId}!");
         }

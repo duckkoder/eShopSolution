@@ -1,7 +1,7 @@
 ﻿using eShopSolution.ViewModels.Common;
 using eShopSolution.ViewModels.System.Users;
 
-namespace eShopSolution.AdminApp.Services
+namespace APIServices
 {
     public interface IUserApiClient
     {
@@ -9,15 +9,15 @@ namespace eShopSolution.AdminApp.Services
 
         public Task<ApiResult<PagedResult<UserViewModel>>> GetUserPaging(GetUserPagingRequest request);
 
-        public Task<ApiResult<bool>> RegisterUser (RegisterRequest request); 
+        public Task<ApiResult<bool>> RegisterUser(RegisterRequest request);
 
-        public Task<ApiResult<bool>> UpdateUser (Guid id, UserUpdateRequest request);
+        public Task<ApiResult<bool>> UpdateUser(Guid id, UserUpdateRequest request);
 
         public Task<ApiResult<UserViewModel>> GetById(Guid id);
 
-        public Task<ApiResult<bool>> DeleteUser (Guid id);
+        public Task<ApiResult<bool>> DeleteUser(Guid id);
 
-        public Task<ApiResult<bool>> RoleAssignUser (Guid id, RoleAssignRequest request);
+        public Task<ApiResult<bool>> RoleAssignUser(Guid id, RoleAssignRequest request);
 
     }
 }

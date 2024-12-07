@@ -1,14 +1,13 @@
-﻿
-using eShopSolution.Utilities.Constants;
+﻿using eShopSolution.Utilities.Constants;
 using eShopSolution.ViewModels.Catalog.Brands;
 using eShopSolution.ViewModels.Common;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
-using System.Net.Http;
 using System.Text;
-using Azure;
 
-namespace eShopSolution.AdminApp.Services
+namespace APIServices
 {
     public class BrandApiClient : ApiClientBase, IBrandApiClient
     {

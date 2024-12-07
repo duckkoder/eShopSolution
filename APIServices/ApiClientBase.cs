@@ -1,12 +1,11 @@
 ﻿using eShopSolution.Utilities.Constants;
-using eShopSolution.ViewModels.Common;
-using eShopSolution.ViewModels.System.Language;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 
-namespace eShopSolution.AdminApp.Services
+namespace APIServices
 {
     public class ApiClientBase
     {
@@ -33,7 +32,7 @@ namespace eShopSolution.AdminApp.Services
             return JsonConvert.DeserializeObject<TResponse>(body);
         }
 
-        protected async Task<TResponse> PostAsync<TResponse>(string url,StringContent httpContent)
+        protected async Task<TResponse> PostAsync<TResponse>(string url, StringContent httpContent)
         {
             var sessions = _httpContextAccessor.HttpContext.Session.GetString(SystemConstants.AppSettings.Token);
             var client = _httpClientFactory.CreateClient();
@@ -62,7 +61,7 @@ namespace eShopSolution.AdminApp.Services
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
-            var response = await client.PutAsync(url,null);
+            var response = await client.PutAsync(url, null);
             var result = await response.Content.ReadAsStringAsync();
 
             return JsonConvert.DeserializeObject<TResponse>(result);

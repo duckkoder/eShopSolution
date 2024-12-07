@@ -1,7 +1,7 @@
 ﻿using eShopSolution.ViewModels.Catalog.Brands;
 using eShopSolution.ViewModels.Common;
 
-namespace eShopSolution.AdminApp.Services
+namespace APIServices
 {
     public interface IBrandApiClient 
     {
