@@ -1,5 +1,6 @@
 ﻿using eShopSolution.Data.Entities;
 using eShopSolution.ViewModels.Catalog.Categories;
+using eShopSolution.ViewModels.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,6 @@ namespace eShopSolution.Application.Catalog.Categories
 {
     public interface ICategoryService
     {
-        Task<List<CategoryViewModel>> GetAll(string languageId);
+        Task<ApiResult<List<CategoryViewModel>>> GetAll(string languageId);
     }
 }
