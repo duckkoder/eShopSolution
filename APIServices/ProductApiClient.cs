@@ -8,6 +8,7 @@ using System.Text;
 using eShopSolution.ViewModels.Catalog.ProductSizes;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using System.Net.Http;
 
 namespace APIServices
 {
@@ -26,10 +27,48 @@ namespace APIServices
         }
         public async Task<ApiResult<int>> AddImage(int productId, ProductImageCreateRequest request)
         {
-            var json = JsonConvert.SerializeObject(request);
-            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString(SystemConstants.AppSettings.Token);
+            if (string.IsNullOrEmpty(sessions))
+            {
+                return new ApiErrorResult<int>("Session token is missing.");
+            }
 
-            return await PostAsync<ApiResult<int>>($"/api/products/{productId}/image", httpContent);
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var requestContent = new MultipartFormDataContent();
+
+            if (request.ImageFile != null && request.ImageFile.Length > 0)
+            {
+                byte[] data;
+                using (var br = new BinaryReader(request.ImageFile.OpenReadStream()))
+                {
+                    data = br.ReadBytes((int)request.ImageFile.Length);
+                }
+
+                ByteArrayContent bytes = new ByteArrayContent(data);
+                requestContent.Add(bytes, "imageFile", request.ImageFile.FileName);
+            }
+            else
+            {
+                return new ApiErrorResult<int>("Image file is required.");
+            }
+
+            requestContent.Add(new StringContent(request.IsDefault.ToString()), "isDefault");
+            requestContent.Add(new StringContent(request.SortOrder.ToString()), "sortOrder");
+            requestContent.Add(new StringContent(request.Caption), "caption");
+            requestContent.Add(new StringContent(request.id.ToString()), "id");
+
+            var response = await client.PostAsync($"/api/products/{productId}/image", requestContent);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return new ApiErrorResult<int>($"Error: {response.StatusCode}, {await response.Content.ReadAsStringAsync()}");
+            }
+
+            var result = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<ApiSuccessResult<int>>(result);
         }
 
         public async Task<ApiResult<bool>> AddViewcount(int productId)
@@ -173,5 +212,33 @@ namespace APIServices
             return await PutAsync<ApiResult<bool>>($"/api/products/{id}/quantity", httpContent);
 
         }
+
+        public async Task<ApiResult<List<ProductViewModel>>> GetProductByBrand(int brandId, string languageId)
+        {
+            return await GetAsync<ApiResult<List<ProductViewModel>>>($"/api/products/brand/{brandId}/language/{languageId}");
+        }
+
+        public async Task<ApiResult<string>> ProductSizePredict(ProductSizePredictRequest request)
+        {
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var client = _httpClientFactory.CreateClient();
+
+            var response = await client.PostAsync("http://127.0.0.1:8000/predict", httpContent);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsStringAsync();
+        
+                var predictionResponse = JsonConvert.DeserializeObject<ProductSizePredictionResponse>(result);
+
+                // Trả về PredictedSize
+                return new ApiSuccessResult<string>(predictionResponse.PredictedSize);
+            }
+
+            return new ApiErrorResult<string>("Predict Failed!!");
+        }
+
     }
 }

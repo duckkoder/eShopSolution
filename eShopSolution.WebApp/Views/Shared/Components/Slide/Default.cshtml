@@ -1,0 +1,41 @@
+﻿@model SlideViewModel
+@{
+    int i = 0,n = Model.Brands.Count;
+    int j = 0,m = Model.Categories.Count;
+
+    while(i<n||j<m)
+    {
+        if(i<n)
+        {
+            <li>
+                <div class="seq-model">
+                    <img data-seq src="~/user-content/@Model.Brands[i].imagePath" alt="@Model.Brands[i].Name img" />
+                </div>
+                <div class="seq-title">
+                    <span data-seq>Save Up to 50% Off</span>
+                    <h2 data-seq>@Model.Brands[i].Name Collection</h2>
+                    <p data-seq>@Model.Brands[i].Description</p>
+                    <a data-seq asp-action="Index" asp-controller="Brand" asp-route-id="@Model.Brands[i].Id" asp-route-name="@Model.Brands[i].Name" class="aa-shop-now-btn aa-secondary-btn">SHOP NOW</a>
+                </div>
+            </li>
+            i++;
+        }
+        if (j < m)
+        {
+            <li>
+                <div class="seq-model">
+                    <img data-seq src="~/user-content/Landing-Page-1880-x-720-Banner-Home-Page-13.webp" alt="@Model.Categories[j].Name img" />
+                </div>
+                <div class="seq-title">
+                    <span data-seq>Save Up to 75% Off</span>
+                    <h2 data-seq>@Model.Categories[j].Name Collection</h2>
+                    <p data-seq>@Model.Categories[j].Name</p>
+                    <a data-seq asp-action="Index" asp-controller="Brand" asp-route-id="@Model.Categories[j].Id" asp-route-name="@Model.Categories[j].Name" class="aa-shop-now-btn aa-secondary-btn">SHOP NOW</a>
+                </div>
+            </li>
+            j++;
+        }
+    }
+
+}
+

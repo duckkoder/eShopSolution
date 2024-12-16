@@ -1,51 +1,86 @@
-/* CSS Document */
-.simpleLens-thumbnails-container a{
-    display: inline-block;
+﻿/* CSS for SimpleLens Thumbnails and Gallery */
+
+/* General styles for thumbnails container */
+.simpleLens-thumbnails-container {
+    display: flex; /* Align items horizontally */
+    gap: 5px; /* Space between thumbnails */
+    flex-wrap: wrap; /* Allow wrapping to next line if necessary */
+    max-width: 100%; /* Restrict width to container */
+    overflow-x: auto; /* Add horizontal scroll if thumbnails exceed width */
+    justify-content: center; /* Center thumbnails */
+    padding: 5px; /* Add padding around thumbnails */
 }
-.simpleLens-thumbnails-container a img{
-    display: block;
-}
-.simpleLens-container{
+
+    /* Thumbnail image styles */
+    .simpleLens-thumbnails-container img {
+        width: 80px; /* Set thumbnail width */
+        height: 80px; /* Set thumbnail height */
+        object-fit: cover; /* Ensure the aspect ratio is maintained */
+        margin: 5px; /* Add spacing between thumbnails */
+        border: 1px solid #ddd; /* Add a border around thumbnails */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add subtle shadow for better visibility */
+        border-radius: 5px; /* Slightly rounded corners */
+        transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add hover effect transitions */
+    }
+
+        /* Hover effect for thumbnails */
+        .simpleLens-thumbnails-container img:hover {
+            transform: scale(1.1); /* Slightly enlarge image on hover */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover */
+        }
+
+/* Big image container styles */
+.simpleLens-container {
     display: table;
     position: relative;
+    margin: auto;
+    max-width: 100%; /* Restrict the width of the big image */
 }
 
 .simpleLens-big-image-container {
     display: table-cell;
     vertical-align: middle;
     text-align: center;
-	position:relative;
-    height: 300px;
-    width: 350px;
+    position: relative;
+    height: 300px; /* Set height of big image container */
+    width: 350px; /* Set width of big image container */
+    margin: auto;
 }
 
 .simpleLens-big-image {
-    max-width: 100%;
+    max-width: 100%; /* Ensure image does not overflow the container */
+    max-height: 100%; /* Maintain aspect ratio within the container */
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
 }
 
+/* Lens image styles */
 .simpleLens-lens-image {
     height: auto !important;
     width: 350px;
     display: inline-block;
     text-align: center;
-    margin:0;
-    box-shadow:none;
-    float:none;
-    position:relative;
+    margin: 0;
+    box-shadow: none;
+    float: none;
+    position: relative;
 }
 
-.simpleLens-mouse-cursor{
-	background-color:#CCC;
-	opacity:0.2;
-	filter: alpha(opacity = 20);
-	position:absolute;
-	top:0;
-	left:0;
-	border:1px solid #999;
-	box-shadow:0 0 2px 2px #999;
-	cursor:none;
+/* Mouse cursor for lens zoom effect */
+.simpleLens-mouse-cursor {
+    background-color: #CCC;
+    opacity: 0.2;
+    filter: alpha(opacity = 20);
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 1px solid #999;
+    box-shadow: 0 0 2px 2px #999;
+    cursor: none;
 }
 
+/* Lens zoom element styles */
 .simpleLens-lens-element {
     background-color: #FFFFFF;
     box-shadow: 0 0 2px 2px #8E8E8E;
@@ -59,10 +94,28 @@
     text-align: center;
 }
 
-.simpleLens-lens-element img{
-    position:relative;
-    top:0;
-    left:0;
-    width:auto !important;
-    max-width:none !important;
+    .simpleLens-lens-element img {
+        position: relative;
+        top: 0;
+        left: 0;
+        width: auto !important;
+        max-width: none !important;
+    }
+
+/* Add responsiveness for smaller screens */
+@media (max-width: 768px) {
+    .simpleLens-big-image-container {
+        width: 100%;
+        height: auto;
+    }
+
+    .simpleLens-thumbnails-container img {
+        width: 60px; /* Smaller thumbnails on mobile */
+        height: 60px;
+    }
+
+    .simpleLens-lens-element {
+        width: 100%; /* Full width zoom on mobile */
+        left: 0;
+    }
 }

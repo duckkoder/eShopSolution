@@ -33,7 +33,6 @@ namespace eShopSolution.Application.Catalog.Products
         Task<ApiResult<bool>> UpdateImage(int imageId, ProductImageUpdateRequest request);
 
         Task<ApiResult<ProductImageViewModel>> GetImageById(int imageId);
-        Task<ApiResult<List<ProductImageViewModel>>> GetListImages(int productId);
 
         Task<ApiResult<PagedResult<ProductViewModel>>> GetAllByCatagoryId(string languageId, GetPublicProductPagingRequest request);
 
@@ -44,6 +43,8 @@ namespace eShopSolution.Application.Catalog.Products
         Task<ApiResult<List<ProductSizeViewModel>>> GetQuantity(int Id);
 
         Task<ApiResult<bool>> UpdateQuantity(UpdateQuantityRequest request);
+
+        Task<ApiResult<List<ProductViewModel>>> GetAllProductByBrand(int brandId, string languageId);
 
 
     }

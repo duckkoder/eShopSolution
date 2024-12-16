@@ -1,4 +1,5 @@
 using APIServices;
+using Microsoft.Extensions.FileProviders;
 
 namespace eShopSolution.WebApp
 {
@@ -43,8 +44,14 @@ namespace eShopSolution.WebApp
 
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "../eShopSolution.BackendApi/wwwroot")),
+                RequestPath = "/user-content"
+            });
 
-			app.UseRouting();
+            app.UseRouting();
 
 			app.UseAuthorization();
             app.UseSession();

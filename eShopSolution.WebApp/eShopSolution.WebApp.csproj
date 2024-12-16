@@ -18,10 +18,36 @@
     <None Include="wwwroot\.sass-cache\ef29edb4d21face4cdada241cd6b836dafbe5b2a\_footer.scssc" />
     <None Include="wwwroot\.sass-cache\ef29edb4d21face4cdada241cd6b836dafbe5b2a\_header.scssc" />
     <None Include="wwwroot\.sass-cache\ef29edb4d21face4cdada241cd6b836dafbe5b2a\_nav.scssc" />
+    <None Include="wwwroot\fonts\fontawesome-webfont.svg" />
+    <None Include="wwwroot\fonts\fontawesome-webfont.woff2" />
+    <None Include="wwwroot\fonts\glyphicons-halflings-regular.svg" />
+    <None Include="wwwroot\fonts\glyphicons-halflings-regular.woff2" />
+    <None Include="wwwroot\js\bootstrap.js" />
+    <None Include="wwwroot\js\custom.js" />
+    <None Include="wwwroot\js\jquery.simpleGallery.js" />
+    <None Include="wwwroot\js\jquery.simpleLens.js" />
+    <None Include="wwwroot\js\jquery.smartmenus.bootstrap.js" />
+    <None Include="wwwroot\js\jquery.smartmenus.js" />
+    <None Include="wwwroot\js\nouislider.js" />
+    <None Include="wwwroot\js\sequence-theme.modern-slide-in.js" />
+    <None Include="wwwroot\js\sequence.js" />
+    <None Include="wwwroot\js\slick.js" />
+    <None Include="wwwroot\scss\base\_base.scss" />
+    <None Include="wwwroot\scss\base\_mixins.scss" />
+    <None Include="wwwroot\scss\base\_variables.scss" />
+    <None Include="wwwroot\scss\layouts\_footer.scss" />
+    <None Include="wwwroot\scss\layouts\_header.scss" />
+    <None Include="wwwroot\scss\layouts\_nav.scss" />
+    <None Include="wwwroot\scss\modules\_buttons.scss" />
+    <None Include="wwwroot\scss\modules\_responsive.scss" />
+    <None Include="wwwroot\scss\modules\_sections.scss" />
+    <None Include="wwwroot\scss\modules\_typography.scss" />
+    <None Include="wwwroot\scss\style.scss" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\APIServices\APIServices.csproj" />
+    <ProjectReference Include="..\eShopSolution.BackendApi\eShopSolution.BackendApi.csproj" />
     <ProjectReference Include="..\eShopSolution.ViewModels\eShopSolution.ViewModels.csproj" />
   </ItemGroup>
 

@@ -36,6 +36,8 @@ namespace APIServices
         Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request);
         Task<ApiResult<List<ProductSizeViewModel>>> GetQuantity(int id);
         Task<ApiResult<bool>> UpdateQuantity(int id, UpdateQuantityRequest request);
+        Task<ApiResult<List<ProductViewModel>>> GetProductByBrand(int brandId,string languageId);
+        Task<ApiResult<string>> ProductSizePredict(ProductSizePredictRequest request);
 
 
     }

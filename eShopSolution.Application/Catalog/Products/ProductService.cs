@@ -9,7 +9,11 @@ using eShopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using System.Drawing;
+using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text.Json.Serialization.Metadata;
 
 namespace eShopSolution.Application.Catalog.Products
@@ -27,26 +31,37 @@ namespace eShopSolution.Application.Catalog.Products
         public async Task<ApiResult<int>> AddImage(int productId, ProductImageCreateRequest request)
         {
             var product = await _context.Products.FindAsync(productId);
-            if (product == null) return new ApiErrorResult<int>($"Cannot find a product: {productId}!");
+            if (product == null)
+                return new ApiErrorResult<int>($"Cannot find a product with ID: {productId}!");
 
-            var productImage = new ProductImage()
+            var productImage = new ProductImage
             {
-                DateCreated = DateTime.Now,
                 ProductId = productId,
+                DateCreated = DateTime.Now,
                 Caption = request.Caption,
+                FileSize = request.ImageFile.Length,
+                ImagePath = await this.SaveFile(request.ImageFile),
                 IsDefault = request.IsDefault,
                 SortOrder = request.SortOrder
             };
-            if (request.ImageFile != null)
+
+            if (request.IsDefault)
             {
-                productImage.ImagePath = await this.SaveFile(request.ImageFile);
-                productImage.FileSize = request.ImageFile.Length;
+                var defaultImage = await _context.ProductImages
+                    .Where(x => x.ProductId == productId && x.IsDefault)
+                    .FirstOrDefaultAsync();
+
+                if (defaultImage != null)
+                    defaultImage.IsDefault = false;
             }
+
+
             _context.ProductImages.Add(productImage);
             int result = await _context.SaveChangesAsync();
+
             if (result > 0)
                 return new ApiSuccessResult<int>(productImage.Id);
-            return new ApiErrorResult<int>($"Add Image Unsuccessful For Product ID {productId} !");
+            return new ApiErrorResult<int>($"Failed to add image for product ID: {productId}.");
         }
 
         public async Task<ApiResult<bool>> AddViewcount(int productId)
@@ -131,7 +146,7 @@ namespace eShopSolution.Application.Catalog.Products
         {
             new ProductImage()
             {
-                Caption = "Thumbnail image",
+                Caption = "Image",
                 DateCreated = DateTime.Now,
                 FileSize = request.ThumbnailImage.Length,
                 ImagePath = await this.SaveFile(request.ThumbnailImage),
@@ -191,25 +206,31 @@ namespace eShopSolution.Application.Catalog.Products
                         where pt.LanguageId == languageId
                         select new { p, pt, br };
 
-            var data = await query.Select(x => new ProductViewModel()
-            {
-                Id = x.p.Id,
-                Name = x.pt.Name,
-                BrandId = x.br.Id,
-                BrandName = x.br.Name,
-                DateCreated = x.p.DateCreated,
-                Description = x.pt.Description,
-                Details = x.pt.Details,
-                LanguageId = languageId,
-                OriginalPrice = x.p.OriginalPrice,
-                Price = x.p.Price,
-                SeoAlias = x.pt.SeoAlias,
-                SeoDescription = x.pt.SeoDescription,
-                SeoTitle = x.pt.SeoTitle,
-                Stock = x.p.Stock,
-                ViewCount = x.p.ViewCount
-            }).ToListAsync();
-
+            // Lấy danh sách sản phẩm và ánh xạ ảnh mặc định từ bảng ProductImages
+            var data = await query
+                .Select(x => new ProductViewModel()
+                {
+                    Id = x.p.Id,
+                    Name = x.pt.Name,
+                    BrandId = x.br.Id,
+                    BrandName = x.br.Name,
+                    DateCreated = x.p.DateCreated,
+                    Description = x.pt.Description,
+                    Details = x.pt.Details,
+                    LanguageId = languageId,
+                    OriginalPrice = x.p.OriginalPrice,
+                    Price = x.p.Price,
+                    SeoAlias = x.pt.SeoAlias,
+                    SeoDescription = x.pt.SeoDescription,
+                    SeoTitle = x.pt.SeoTitle,
+                    Stock = x.p.Stock,
+                    ViewCount = x.p.ViewCount,
+                    ImageThumbnails = _context.ProductImages
+                        .Where(pi => pi.ProductId == x.p.Id && pi.IsDefault)
+                        .Select(pi => pi.ImagePath)
+                        .FirstOrDefault()
+                })
+                .ToListAsync();
 
             return new ApiSuccessResult<List<ProductViewModel>>(data);
         }
@@ -324,6 +345,41 @@ namespace eShopSolution.Application.Catalog.Products
             return new ApiSuccessResult<PagedResult<ProductViewModel>>(pagedResult);
         }
 
+        public async Task<ApiResult<List<ProductViewModel>>> GetAllProductByBrand(int brandId, string languageId)
+        {
+            var query = from p in _context.Products
+                        join pt in _context.ProductTranslations on p.Id equals pt.ProductId
+                        join br in _context.Brands on p.BrandId equals br.Id
+                        where pt.LanguageId == languageId && br.Id == brandId
+                        select new { p, pt, br };
+
+            var data = await query.Select(x => new ProductViewModel()
+            {
+                Id = x.p.Id,
+                Name = x.pt.Name,
+                BrandId = x.br.Id,
+                BrandName = x.br.Name,
+                DateCreated = x.p.DateCreated,
+                Description = x.pt.Description,
+                Details = x.pt.Details,
+                LanguageId = languageId,
+                OriginalPrice = x.p.OriginalPrice,
+                Price = x.p.Price,
+                SeoAlias = x.pt.SeoAlias,
+                SeoDescription = x.pt.SeoDescription,
+                SeoTitle = x.pt.SeoTitle,
+                Stock = x.p.Stock,
+                ViewCount = x.p.ViewCount,
+                ImageThumbnails = _context.ProductImages
+                                            .Where(pi => pi.ProductId == x.p.Id && pi.IsDefault)
+                                            .Select(pi => pi.ImagePath)
+                                            .FirstOrDefault()
+            }).ToListAsync();
+
+            return new ApiSuccessResult<List<ProductViewModel>>(data);
+        }
+
+
         public async Task<ApiResult<ProductViewModel>> GetById(int productId, string languageId)
         {
             var product = await _context.Products.FindAsync(productId);
@@ -337,6 +393,14 @@ namespace eShopSolution.Application.Catalog.Products
                                     from pic in picct.DefaultIfEmpty()
                                     where pic.ProductId == productId && ct.LanguageId == languageId
                                     select ct.Name).ToListAsync();
+            var image = await (from pi in _context.ProductImages 
+                               where pi.ProductId == productId
+                               select pi.ImagePath ).ToListAsync();
+            var thumbnailsImage = await (from pi in _context.ProductImages
+                                         where pi.ProductId == productId && pi.IsDefault
+                                         select pi.ImagePath ).FirstOrDefaultAsync(); 
+
+
 
             var productViewModel = new ProductViewModel()
             {
@@ -355,9 +419,10 @@ namespace eShopSolution.Application.Catalog.Products
                 SeoTitle = productTranslation != null ? productTranslation.SeoTitle : "null",
                 Stock = product.Stock,
                 ViewCount = product.ViewCount,
+                Images = image, 
+                ImageThumbnails = thumbnailsImage,
                 Categories = categories != null ? categories : new List<string>()
             };
-
             return new ApiSuccessResult<ProductViewModel>(productViewModel);
         }
 
@@ -380,12 +445,12 @@ namespace eShopSolution.Application.Catalog.Products
             return new ApiSuccessResult<ProductImageViewModel>(Image);
         }
 
-        public async Task<ApiResult<List<ProductImageViewModel>>> GetListImages(int productId)
+        private async Task<List<ProductImageViewModel>> GetListImages(int productId)
         {
             var product = await _context.Products.FindAsync(productId);
             if (product == null)
                 new ApiErrorResult<ProductViewModel>($"Cannot find a product: {productId}");
-            return new ApiSuccessResult<List<ProductImageViewModel>>(await _context.ProductImages.Where(x => x.ProductId == productId)
+            return await _context.ProductImages.Where(x => x.ProductId == productId)
             .Select(i => new ProductImageViewModel
             {
                 Caption = i.Caption,
@@ -396,8 +461,7 @@ namespace eShopSolution.Application.Catalog.Products
                 ImagePath = i.ImagePath,
                 ProductId = i.ProductId,
                 SortOrder = i.SortOrder
-
-            }).ToListAsync());
+            }).ToListAsync();
         }
 
         public async Task<ApiResult<List<ProductSizeViewModel>>> GetQuantity(int Id)
@@ -414,6 +478,7 @@ namespace eShopSolution.Application.Catalog.Products
 
             return new ApiSuccessResult<List<ProductSizeViewModel>>(productSizes);
         }
+
 
         public async Task<ApiResult<bool>> RemoveImage(int imageId)
         {
@@ -503,9 +568,9 @@ namespace eShopSolution.Application.Catalog.Products
             int quantity = 0;
             for (int i = 1; i <= 6; i++)
             {
-               var size =  await _context.ProductSizes.FindAsync(request.ProductId, i);
-                size.Quantity = request.ProductSizes.Where(x=>x.Id==i).Select(request=>request.Quantity).Sum(); 
-                quantity+= size.Quantity;
+                var size = await _context.ProductSizes.FindAsync(request.ProductId, i);
+                size.Quantity = request.ProductSizes.Where(x => x.Id == i).Select(request => request.Quantity).Sum();
+                quantity += size.Quantity;
             }
             product.Stock = quantity;
 
