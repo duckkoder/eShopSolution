@@ -19,7 +19,7 @@ namespace eShopSolution.WebApp.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var languageId = "en-US";
+            var languageId = HttpContext.Session.GetString(SystemConstants.AppSettings.DefaultLanguageID);
 
             var brands = await _brandApiClient.GetAll();
             var categories = await _categoryApiClient.GetAll(languageId);

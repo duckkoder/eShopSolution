@@ -57,10 +57,10 @@
                             <td class="no-translate">@Html.DisplayFor(modelItem => item.Stock)</td>
                             <td>
                                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
                                 @Html.ActionLink("Delete", "Delete", new { id = item.Id }) |
-                                @Html.ActionLink("Assign Category", "CategoryAssign", new { id = item.Id })
-                                @Html.ActionLink("Quantity", "GetSize", new { id = item.Id })
+                                @Html.ActionLink("Assign Category", "CategoryAssign", new { id = item.Id })|
+                                @Html.ActionLink("Quantity", "GetSize", new { id = item.Id })|
+                                @Html.ActionLink("Add Image", "AddImage", new { id = item.Id })
                             </td>
                         </tr>
                     }

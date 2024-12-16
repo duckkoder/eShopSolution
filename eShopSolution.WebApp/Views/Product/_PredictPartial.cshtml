@@ -1,0 +1,21 @@
+﻿@model eShopSolution.ViewModels.Catalog.Products.ProductSizePredictRequest
+@{
+}
+<div id="predictPartial">
+    <h4>Input Your Height And Weight</h4>
+    <form id="predictForm">
+        <input asp-for="Brand" type="hidden" />
+        <input asp-for="Type" type="hidden" />
+        <input asp-for="Gender" type="hidden" />
+        <input asp-for="Height" type="text" placeholder="Your Height(Cm)" class="form-control" />
+        <input asp-for="Weight" type="text" placeholder="Your Weight(Kg)" class="form-control" />
+        <button type="button" id="calculateButton" class="btn btn-primary">Calculate</button>
+    </form>
+
+    <div id="result">
+        @if (ViewBag.Result != null)
+        {
+            <p>Recommended Size: @ViewBag.Result</p>
+        }
+    </div>
+</div>

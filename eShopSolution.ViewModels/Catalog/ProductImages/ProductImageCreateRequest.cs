@@ -9,10 +9,11 @@ namespace eShopSolution.ViewModels.Catalog.ProductImages
 {
 	public class ProductImageCreateRequest
 	{
-		public string Caption { get; set; }
-		public bool IsDefault { get; set; }
-		public int SortOrder { get; set; }
+		public int id { get; set; }
+		public string Caption { get; set; } = "";
+		public bool IsDefault { get; set; } = false;
+		public int SortOrder { get; set; } = 0;
 
-		public IFormFile ImageFile {  get; set; }
+		public IFormFile ImageFile {  get; set; } 
 	}
 }

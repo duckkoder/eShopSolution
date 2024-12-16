@@ -1,0 +1,56 @@
+﻿@model eShopSolution.ViewModels.Catalog.ProductImages.ProductImageCreateRequest
+
+@{
+    ViewData["Title"] = "Add Image";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Add Image</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item "> <a asp-action="Index" asp-controller="Product">Product</a> </li>
+        <li class="breadcrumb-item active">Add Image</li>
+
+    </ol>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table mr-1">  </i>
+            <a class="btn btn-success" asp-action="Index" asp-controller="Product">Back To List's Product</a>
+        </div>
+        <div class="card-body">
+            <form asp-action="AddImage" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Caption" class="control-label"></label>
+                    <input asp-for="Caption" class="form-control" />
+                    <span asp-validation-for="Caption" class="text-danger"></span>
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input" asp-for="IsDefault" /> Is Thumbnail's Image?
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label asp-for="SortOrder" class="control-label"></label>
+                    <input asp-for="SortOrder" class="form-control" />
+                    <span asp-validation-for="SortOrder" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ImageFile" class="control-label"></label>
+                    <input asp-for="ImageFile" type="file" class="form-control" />
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
+                </div>
+                <input type="hidden" asp-for="id" />
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+

@@ -3,6 +3,7 @@ using eShopSolution.Utilities.Constants;
 using eShopSolution.ViewModels.Catalog.Products;
 using Microsoft.AspNetCore.Mvc;
 using eShopSolution.ViewModels.Common;
+using eShopSolution.ViewModels.Catalog.ProductImages;
 
 namespace eShopSolution.AdminApp.Controllers
 {
@@ -90,7 +91,6 @@ namespace eShopSolution.AdminApp.Controllers
 
         [HttpPost]
         [Consumes("multipart/form-data")]
-
         public async Task<IActionResult> Edit (ProductUpdateRequest request)
         {
 
@@ -208,6 +208,34 @@ namespace eShopSolution.AdminApp.Controllers
             }
             TempData["message"] = result.Message;
             return RedirectToAction("Index");
+        }
+
+
+        [HttpGet]
+        public IActionResult AddImage(int id)
+        {
+            var request = new ProductImageCreateRequest() { 
+                id = id
+            };
+            return View(request);
+        }
+
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> AddImage(ProductImageCreateRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Index");
+            }
+            var result = await _productApiClient.AddImage(request.id,request);
+            if (result.IsSuccessed)
+            {
+                TempData["message"] = result.Message;
+                return RedirectToAction("Index", "Product");
+            }
+            ModelState.AddModelError("", result.Message);
+            return View(request);
         }
 
     }

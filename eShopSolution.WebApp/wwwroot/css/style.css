@@ -4183,4 +4183,36 @@ img {
     padding: 5px 2px;
   }
 }
+.size_hover {
+    color: green;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid green;
+    display: inline-block;
+    margin: 5px;
+    border-radius: 5px;
+}
 
+.size_hover:hover {
+        background-color: #f0f0f0;
+}
+
+.size-hover-selected {
+    background-color: pink;
+    color: white;
+    border-color: pink;
+}
+
+.size-sold-out {
+    color: red;
+    font-style: italic;
+    text-decoration: line-through;
+    cursor: not-allowed;
+    padding: 5px 10px;
+    display: inline-block;
+    margin: 5px;
+    border: 1px solid red;
+    border-radius: 5px;
+}

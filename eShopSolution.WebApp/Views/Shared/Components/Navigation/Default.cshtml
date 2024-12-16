@@ -35,7 +35,7 @@
                                     <ul class="dropdown-menu">
                                         @for (int i = Model.Categories.Count - 3; i < Model.Categories.Count; i++)
                                         {
-                                            <li><a href="#">@Model.Categories[i].Name</a></li>
+                                            <li><a asp-action="Index" asp-controller="Brand" >@Model.Categories[i].Name</a></li>
                                         }
                                     </ul>
                                 </li>
@@ -46,14 +46,22 @@
                             <ul class="dropdown-menu">
                                 @for(int i=0;i<Model.Brands.Count-3;i++)
                                 {
-                                    <li><a href="#">@Model.Brands[i].Name</a></li>
+                                    <li>
+                                    <a asp-action="Index" asp-controller="Brand" asp-route-id="@Model.Brands[i].Id" asp-route-name="@Model.Brands[i].Name">
+                                        @Model.Brands[i].Name
+                                    </a>
+                                    </li>
                                 }
                                 <li>
                                     <a href="#">And more.. <span class="caret"></span></a>
                                     <ul class="dropdown-menu">
                                         @for (int i = Model.Brands.Count - 3; i < Model.Brands.Count; i++)
                                         {
-                                            <li><a href="#">@Model.Brands[i].Name</a></li>
+                                            <li>
+                                                <a asp-action="Index" asp-controller="Brand" asp-route-id="@Model.Brands[i].Id" asp-route-name="@Model.Brands[i].Name">
+                                                    @Model.Brands[i].Name
+                                                </a>
+                                            </li>
                                         }
                                     </ul>
                                 </li>

@@ -76,7 +76,7 @@ namespace eShopSolution.BackendApi.Controllers
         }
 
 		[HttpPost]
-        /*[Authorize]*/
+        [Authorize]
 		[Consumes("multipart/form-data")]
         public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
 		{
@@ -146,11 +146,23 @@ namespace eShopSolution.BackendApi.Controllers
             return Ok(result);
         }
 
+        [HttpGet("brand/{brandId:int}/language/{languageId}")]
+        public async Task<IActionResult> GetAllProductByBrand(int brandId, string languageId)
+        {
+            var products = await _productService.GetAllProductByBrand(brandId, languageId);
+
+            if (!products.IsSuccessed)
+                return BadRequest(products);
+            return Ok(products);
+        }
 
 
-		//image
 
-		[HttpPost("{productId}/image")]
+
+        //image
+
+        [HttpPost("{productId}/image")]
+        [Consumes("multipart/form-data")]
         [Authorize]
         public async Task<IActionResult> CreateImage(int productId, [FromForm] ProductImageCreateRequest request)
 		{
@@ -160,22 +172,10 @@ namespace eShopSolution.BackendApi.Controllers
 
 			if (!result.IsSuccessed)
 				return BadRequest(result);
-			result.Message = $"Add Image Successful For Product Id {productId}!";
-			var image = await _productService.GetImageById(result.ResultObj);
-
-
-			return CreatedAtAction(nameof(GetImageById), new { id = result.ResultObj }, image);
-		}
-
-		[HttpGet("{productId}/ListImage")]
-		public async Task<IActionResult> GetListImage(int productId)
-		{
-			var result = await _productService.GetListImages(productId);
-			if (!result.IsSuccessed)
-				return BadRequest(result);
 			return Ok(result);
 		}
 
+		
 		[HttpGet("image/{imageId}")]
 		public async Task<IActionResult> GetImageById(int imageId)
 		{

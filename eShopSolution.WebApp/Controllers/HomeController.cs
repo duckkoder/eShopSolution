@@ -1,3 +1,4 @@
+using eShopSolution.Utilities.Constants;
 using eShopSolution.WebApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -15,7 +16,9 @@ namespace eShopSolution.WebApp.Controllers
 
 		public IActionResult Index()
 		{
-			return View();
+			HttpContext.Session.SetString(SystemConstants.AppSettings.DefaultLanguageID, "en-US");
+
+            return View();
 		}
 
 
