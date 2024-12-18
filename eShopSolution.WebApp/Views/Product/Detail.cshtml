@@ -2,22 +2,23 @@
 @{
     ViewData["Title"] = "Details";
 }
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @section extend {
 
     <script>
         function selectSize(element) {
-            // Bỏ trạng thái "selected" của các phần tử khác
+           
             const allSizes = document.querySelectorAll('.aa-prod-view-size a');
             allSizes.forEach(size => {
                 size.classList.remove('selected');
-                size.style.backgroundColor = 'transparent'; // Xóa màu nền
+                size.style.backgroundColor = 'transparent'; 
                 size.style.color = 'black';
                 size.style.borderColor = 'black';
             });
 
-            // Thêm trạng thái "selected" vào phần tử được nhấn
+          
             element.classList.add('selected');
-            element.style.backgroundColor = 'lightblue'; // Màu xanh biển khi chọn
+            element.style.backgroundColor = 'lightblue';
             element.style.color = 'green';
             element.style.borderColor = 'green';
         }
@@ -26,16 +27,12 @@
         $(document).ready(function () {
             // Gắn sự kiện bằng document để xử lý động
             $(document).on('click', '#calculateButton', function () {
-                var formData = $('#predictForm').serialize(); // Lấy dữ liệu từ form
+                var formData = $('#predictForm').serialize(); 
 
                 $.ajax({
-                    url: '/Product/CalculatePrediction', // Đường dẫn đến action trong controller
+                    url: '/Product/CalculatePrediction', 
                     type: 'POST',
                     data: formData,
-                    success: function (response) {
-                        // Cập nhật nội dung của Partial View
-                        $('#partialContainer').html(response);
-                    },
                     error: function () {
                         alert('Error while processing request.');
                     }
@@ -43,7 +40,6 @@
             });
         });
     </script>
-
 
 }
 
@@ -79,9 +75,9 @@
                                         <!-- Vùng hiển thị ảnh lớn -->
                                         <div class="simpleLens-container">
                                             <div class="simpleLens-big-image-container">
-                                                <a data-lens-image="@Url.Content("~/user-content/" + Model.product.ImageThumbnails)"
+                                                <a data-lens-image="@(Configuration["BaseAddress"] + "user-content/" + Model.product.ImageThumbnails)"
                                                    class="simpleLens-lens-image">
-                                                    <img src="@Url.Content("~/user-content/" + Model.product.ImageThumbnails)"
+                                                    <img src="@(Configuration["BaseAddress"]+ "user-content/" + Model.product.ImageThumbnails)"
                                                          class="simpleLens-big-image" alt="Product Image">
                                                 </a>
                                             </div>
@@ -91,10 +87,10 @@
                                         <div class="simpleLens-thumbnails-container">
                                             @foreach (var image in Model.product.Images)
                                             {
-                                                <a data-big-image="@Url.Content("~/user-content/" + image)"
-                                                   data-lens-image="@Url.Content("~/user-content/" + image)"
+                                                <a data-big-image="@(Configuration["BaseAddress"] + "user-content/" + image)"
+                                                   data-lens-image="@(Configuration["BaseAddress"] + "user-content/" + image)"
                                                    class="simpleLens-thumbnail-wrapper" href="javascript:void(0);">
-                                                    <img src="@Url.Content("~/user-content/" + image)" style="width:30px; height:30px;" alt="Thumbnail">
+                                                    <img src="@(Configuration["BaseAddress"]+ "user-content/" + image)" style="width:30px; height:30px;" alt="Thumbnail">
                                                 </a>
                                             }
                                         </div>

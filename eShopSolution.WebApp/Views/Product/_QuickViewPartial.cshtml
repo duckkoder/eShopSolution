@@ -1,0 +1,103 @@
+﻿@model eShopSolution.ViewModels.Catalog.Products.ProductDetailViewModel
+
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+
+<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+<div class="row">
+    <!-- Modal view slider -->
+    <div class="col-md-6 col-sm-6 col-xs-12">
+        <div class="aa-product-view-slider">
+            <div class="simpleLens-gallery-container" id="demo-1">
+                <div class="simpleLens-container">
+                    <div class="simpleLens-big-image-container">
+                        <a data-lens-image="@(Configuration["BaseAddress"] + "user-content/" + Model.product.ImageThumbnails)"
+                           class="simpleLens-lens-image">
+                            <img src="@(Configuration["BaseAddress"]+ "user-content/" + Model.product.ImageThumbnails)"
+                                 class="simpleLens-big-image" alt="Product Image">
+                        </a>
+                    </div>
+                </div>
+                <div class="simpleLens-thumbnails-container">
+                    @foreach (var image in Model.product.Images)
+                    {
+                        <a data-big-image="@(Configuration["BaseAddress"] + "user-content/" + image)"
+                           data-lens-image="@(Configuration["BaseAddress"] + "user-content/" + image)"
+                           class="simpleLens-thumbnail-wrapper" href="javascript:void(0);">
+                            <img src="@(Configuration["BaseAddress"]+ "user-content/" + image)" style="width:30px; height:30px;" alt="Thumbnail">
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal view content -->
+    <div class="col-md-6 col-sm-6 col-xs-12">
+        <div class="aa-product-view-content">
+            <h3>@Model.product.Name</h3>
+            <div class="aa-price-block">
+                <span class="aa-product-view-price">@Model.product.Price VND</span>
+                @if (Model.product.Stock > 0)
+                {
+                    <p class="aa-product-avilability">Availability: <span>In stock</span></p>
+                }
+                else
+                {
+                    <p class="aa-remove-product">Availability: <span>Out of stock</span></p>
+                }
+            </div>
+            <p>@Model.product.Description</p>
+            <h4>Size</h4>
+            <div class="aa-prod-view-size">
+                @foreach (var size in Model.ProductSizes)
+                {
+                    if (size.Quantity > 0)
+                    {
+                        <a style="color: black; text-decoration: none; padding: 5px 10px; border: 1px solid black; margin: 5px; display: inline-block; cursor: pointer; transition: all 0.3s;"
+                           onclick="selectSize(this)"
+                           onmouseover="this.style.color='green'; this.style.borderColor='green';"
+                           onmouseout="if (!this.classList.contains('selected')) { this.style.color='black'; this.style.borderColor='black'; }">
+                            @size.Name
+                        </a>
+                    }
+                    else
+                    {
+                        <a style="color: red; text-decoration: line-through; padding: 5px 10px; border: 1px solid red; margin: 5px; display: inline-block; cursor: not-allowed;"
+                           onclick="return false;">
+                            @size.Name
+                        </a>
+                    }
+                }
+            </div>
+
+
+            <div class="aa-prod-quantity">
+                <form action="">
+                    <select id="" name="">
+                        <option selected="1" value="0">1</option>
+                        <option value="1">2</option>
+                        <option value="2">3</option>
+                        <option value="3">4</option>
+                        <option value="4">5</option>
+                        <option value="5">6</option>
+                    </select>
+                </form>
+                @{
+                    var categories = "";
+                    foreach (var c in Model.product.Categories)
+                    {
+                        categories += c + " ";
+                    }
+                }
+                <p class="aa-prod-category">
+                    Category: <a href="#">@categories</a>
+                </p>
+            </div>
+            <div class="aa-prod-view-bottom">
+                <a class="aa-add-to-cart-btn" href="#">Add To Cart</a>
+                <a class="aa-add-to-cart-btn" href="#">Wishlist</a>
+                <a class="aa-add-to-cart-btn" href="#">Compare</a>
+            </div>
+        </div>
+    </div>
+</div>
+
