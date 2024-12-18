@@ -45,5 +45,24 @@ namespace eShopSolution.WebApp.Controllers
             return PartialView("_PredictPartial", request);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetProductQuickView(int id)
+        {
+            var languageId = HttpContext.Session.GetString(SystemConstants.AppSettings.DefaultLanguageID);
+
+            var product = await _productApiClient.GetById(id, languageId);
+            var productSize = await _productApiClient.GetQuantity(id);
+            if (!product.IsSuccessed || !productSize.IsSuccessed)
+                return NotFound();
+            var model = new ProductDetailViewModel()
+            {
+                product = product.ResultObj,
+                ProductSizes = productSize.ResultObj
+            };
+
+            return PartialView("_QuickViewPartial", model);
+        }
+
+
     }
 }
