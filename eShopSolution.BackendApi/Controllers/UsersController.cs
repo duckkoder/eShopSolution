@@ -28,6 +28,18 @@ namespace eShopSolution.BackendApi.Controllers
 
             return Ok(result);
         }
+        [HttpPost("authenticate-with-google")]
+        [AllowAnonymous]
+        public async Task<IActionResult> AuthenticateWithGoogle([FromBody] LoginWithGoogleRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _userService.AuthenticateWithGoogle(request);
+
+            return Ok(result);
+        }
+
 
         [HttpPost]
         [AllowAnonymous]

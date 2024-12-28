@@ -1,0 +1,87 @@
+﻿@model eShopSolution.ViewModels.System.Users.LoginRequest
+@section extend {
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <link href="https://fonts.googleapis.com/css?family=Oxygen:700|Source+Sans+Pro:300" rel="stylesheet">
+
+    <script>
+        setTimeout(function () {
+            $('#msgAlert').fadeOut('slow');
+        }, 5000);
+    </script>
+}
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+<!-- catg header banner section -->
+<section id="aa-catg-head-banner">
+    <img src="~/user-content/10614.jpg" alt="fashion img" style="height:300px; width:1920px;">
+    <div class="aa-catg-head-banner-area">
+        <div class="container">
+            <div class="aa-catg-head-banner-content">
+                <h2>Login</h2>
+                <ol class="breadcrumb">
+                    <li><a href="index.html">Home</a></li>
+                    <li class="active">Login</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- / catg header banner section -->
+<!-- Cart view section -->
+<section id="aa-myaccount">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="aa-myaccount-area">
+                    <div class="row">
+                        @if (ViewBag.message != null)
+                        {
+                            <div id="msgAlert" class="alert alert-success" role="alert">
+                                <div class="row">
+                                    @ViewBag.message
+                                </div>
+                            </div>
+                        }
+                        <div class="col-md-6">
+                            <div class="aa-myaccount-login">
+                                <h4>Login</h4>
+                                <form class="aa-login-form" asp-action="Login" asp-controller="Account" method="post">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger "></div>
+                                    <div>
+                                        <label for="">Username or Email address<span>*</span></label>
+                                        <input class="form-control" type="text" placeholder="Username or email" asp-for="UserName">
+                                        <span asp-validation-for="UserName" class="text-danger"></span>
+                                    </div>
+
+                                    <div
+                                    <label for="">Password<span>*</span></label>
+                                    <input class="form-control" type="password" placeholder="Password" asp-for="Password">
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+
+
+                                    <label for="rememberme" class="rememberme"><input type="checkbox" asp-for="IsRememberMe" id="rememberme"> Remember me </label>
+                                    <button class="aa-browse-btn" type="submit">Login</button>
+                                    <p class="aa-lost-password"><a href="#">Lost your password?</a></p>
+                                    <div class="aa-register-now">
+                                        Don't have an account?<a asp-action="Register" asp-controller="Account">Register now!</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="aa-myaccount-register">
+                                <h4>Use Another Service To Login</h4>
+                                <a class="btn btn-default" href="https://accounts.google.com/o/oauth2/auth?client_id=@Configuration["Authentication:Google:ClientId"]&redirect_uri=https://localhost:7072/Account/GoogleLoginCallback&scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email&response_type=code&state=asdafwswdwefwsdg">
+                                    Google
+                                </a>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- / Cart view section -->

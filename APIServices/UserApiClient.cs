@@ -24,6 +24,13 @@ namespace APIServices
             return await PostAsync<ApiResult<string>>("/api/users/authenticate", httpContent);
         }
 
+        public async Task<ApiResult<string>> AuthenticateWithGoogle(LoginWithGoogleRequest request)
+        {
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            return await PostAsync<ApiResult<string>>("/api/users/authenticate-with-google", httpContent);
+        }
+
         public async Task<ApiResult<bool>> DeleteUser(Guid id)
         {
             return await DeleteAsync<ApiResult<bool>>($"/api/users/{id}");

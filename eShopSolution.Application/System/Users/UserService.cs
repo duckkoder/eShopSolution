@@ -30,7 +30,8 @@ namespace eShopSolution.Application.System.Users
         }
         public async Task<ApiResult<string>> Authenticate(LoginRequest request)
         {
-            var user = await _userManager.FindByNameAsync(request.UserName);
+            var user = await _userManager.FindByNameAsync(request.UserName) ?? await _userManager.FindByEmailAsync(request.UserName);
+
             if (user == null)
             {
                 return new ApiErrorResult<string>("Account does not exist!");
@@ -47,7 +48,7 @@ namespace eShopSolution.Application.System.Users
                 new Claim(ClaimTypes.Email,user.Email),
                 new Claim(ClaimTypes.GivenName,user.FirstName),
                 new Claim(ClaimTypes.Role, string.Join(";",roles)),
-                new Claim(ClaimTypes.Name, request.UserName)
+                new Claim(ClaimTypes.Name, user.UserName)
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -59,6 +60,33 @@ namespace eShopSolution.Application.System.Users
                 signingCredentials: creds);
 
             return new ApiSuccessResult<string>(new JwtSecurityTokenHandler().WriteToken(token));
+        }
+
+        public async Task<ApiResult<string>> AuthenticateWithGoogle(LoginWithGoogleRequest request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null)
+            {
+                return new ApiErrorResult<string>("Email never logged in");
+            }
+            var roles = await _userManager.GetRolesAsync(user);
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.Email,user.Email),
+                new Claim(ClaimTypes.GivenName,user.FirstName),
+                new Claim(ClaimTypes.Role, string.Join(";",roles)),
+                new Claim(ClaimTypes.Name, user.UserName)
+            };
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(_config["Tokens:Issuer"],
+                _config["Tokens:Issuer"],
+                claims,
+                expires: DateTime.Now.AddHours(3),
+                signingCredentials: creds);
+
+            return new ApiSuccessResult<string>(new JwtSecurityTokenHandler().WriteToken(token)).CreateMessage("You have logged in before. Continue logging in?");
         }
 
         public async Task<ApiResult<bool>> Delete(Guid id)
@@ -82,11 +110,13 @@ namespace eShopSolution.Application.System.Users
         public async Task<ApiResult<UserViewModel>> GetById(Guid id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
-            if (user == null) {
+            if (user == null)
+            {
                 return new ApiErrorResult<UserViewModel>("User does not exist");
             }
             var roles = await _userManager.GetRolesAsync(user);
-            var data = new UserViewModel() {
+            var data = new UserViewModel()
+            {
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 UserName = user.UserName,
@@ -193,7 +223,7 @@ namespace eShopSolution.Application.System.Users
                     await _userManager.AddToRoleAsync(user, roleName);
                 }
             }
-            
+
             return new ApiSuccessResult<bool>().CreateMessage("Registration role Successfully!");
         }
 
@@ -205,7 +235,7 @@ namespace eShopSolution.Application.System.Users
             }
 
             var user = await _userManager.FindByIdAsync(userId.ToString());
-            
+
             user.Dob = request.Dob;
             user.Email = request.Email;
             user.FirstName = request.FirstName;
@@ -218,7 +248,7 @@ namespace eShopSolution.Application.System.Users
             {
                 return new ApiSuccessResult<bool>().CreateMessage("Update Successfully!");
             }
-         
+
             return new ApiErrorResult<bool>("Update failed!");
         }
 

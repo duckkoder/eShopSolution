@@ -1,5 +1,7 @@
 using eShopSolution.Utilities.Constants;
 using eShopSolution.WebApp.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -14,11 +16,12 @@ namespace eShopSolution.WebApp.Controllers
 			_logger = logger;
 		}
 
-		public IActionResult Index()
+		public async Task<IActionResult> Index()
 		{
 			HttpContext.Session.SetString(SystemConstants.AppSettings.DefaultLanguageID, "en-US");
-
-            return View();
+			var user = User.Identity.Name;
+            ViewData["Title"] = "User";
+            return View(); 
 		}
 
 

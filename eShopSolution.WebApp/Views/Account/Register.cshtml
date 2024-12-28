@@ -1,0 +1,169 @@
+﻿@model eShopSolution.ViewModels.System.Users.RegisterRequest
+
+@{
+    ViewData["Title"] = "Register";
+    <script>
+        setTimeout(function () {
+            $('#msgAlert').fadeOut('slow');
+        }, 5000);
+    </script>
+}
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@section extend{
+   
+}
+<!-- catg header banner section -->
+<section id="aa-catg-head-banner">
+    <img src="~/user-content/10614.jpg" alt="fashion img" style="height:300px; width:1920px;">
+    <div class="aa-catg-head-banner-area">
+        <div class="container">
+            <div class="aa-catg-head-banner-content">
+                <h2>Register Page</h2>
+                <ol class="breadcrumb">
+                    <li><a href="index.html">Home</a></li>
+                    <li class="active">Account</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- / catg header banner section -->
+<!-- Cart view section -->
+<section id="aa-myaccount">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="aa-myaccount-area">
+                    <div class="row">
+                        @if (ViewBag.message != null)
+                        {
+                            <div id="msgAlert" class="alert alert-success" role="alert">
+                                <div class="row">
+                                    @ViewBag.message
+                                </div>
+                            </div>
+                        }
+                        <div class="col-md-6">
+                            <div class="aa-myaccount-register">
+                                <h4>Join With Us!</h4>
+                                <form asp-action="RegisterUser" asp-controller="Account">
+                                    <div class="form-floating mb-3">
+                                        <div class="form-group">
+                                            <label asp-for="UserName" class="control-label"></label>
+                                            <input asp-for="UserName" class="form-control"/>
+                                            <span asp-validation-for="UserName" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    @if (ViewData["Type"] == "Google")
+                                    {
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <div class="form-floating mb-3 mb-md-0">
+                                                    <div class="form-group">
+                                                        <label asp-for="FirstName" class="control-label"></label>
+                                                        <input asp-for="FirstName" value="@Model.FirstName" class="form-control" readonly />
+                                                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-floating">
+                                                    <div class="form-group">
+                                                        <label asp-for="LastName" class="control-label"></label>
+                                                        <input asp-for="LastName" value="@Model.LastName" class="form-control" readonly />
+                                                        <span asp-validation-for="LastName" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <div class="form-group">
+                                                <label asp-for="Email" class="control-label"></label>
+                                                <input asp-for="Email" value="@Model.Email" class="form-control" readonly />
+                                                <span asp-validation-for="Email" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="form-floating mb-3">
+                                            <div class="form-group">
+                                                <label asp-for="FirstName" class="control-label"></label>
+                                                <input asp-for="FirstName" class="form-control" />
+                                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <div class="form-group">
+                                                <label asp-for="LastName" class="control-label"></label>
+                                                <input asp-for="LastName" class="form-control" />
+                                                <span asp-validation-for="LastName" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <div class="form-group">
+                                                <label asp-for="Email" class="control-label"></label>
+                                                <input asp-for="Email" class="form-control" />
+                                                <span asp-validation-for="Email" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    <div class="form-floating mb-3">
+                                        <div class="form-group">
+                                            <label asp-for="PhoneNumber" class="control-label"></label>
+                                            <input asp-for="PhoneNumber" class="form-control" />
+                                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <div class="form-group">
+                                            <label asp-for="Dob" class="control-label"></label>
+                                            <input asp-for="Dob" class="form-control" />
+                                            <span asp-validation-for="Dob" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <div class="form-floating mb-3 mb-md-0">
+                                                <div class="form-group">
+                                                    <label asp-for="Password" class="control-label"></label>
+                                                    <input asp-for="Password" class="form-control" />
+                                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-floating mb-3 mb-md-0">
+                                                <div class="form-group">
+                                                    <label asp-for="PasswordConfirmed" class="control-label"></label>
+                                                    <input asp-for="PasswordConfirmed" class="form-control" />
+                                                    <span asp-validation-for="PasswordConfirmed" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 mb-0">
+                                        <div class="form-group">
+                                            <input asp-for="IsEmailConfirmed" type="hidden" class="form-control"/>
+                                            <input type="submit" class="btn btn-primary" value="Create" />
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="aa-myaccount-register">
+                                <h4>Use Another Service To Login</h4>
+                                <a class="btn btn-default" href=$"https://accounts.google.com/o/oauth2/auth?client_id ={@Configuration["Authentication:Google:ClientId"]}&redirect_uri ={@Configuration["WebAddress"]}/Account/GoogleLoginCallback&scope =https://www.googleapis.com/auth/userinfo.profile https: //www.googleapis.com/auth/userinfo.email&response_type =code&state =asdafwswdwefwsdg">
+                                    Google
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- / Cart view section -->

@@ -28,7 +28,8 @@ namespace eShopSolution.AdminApp.Controllers
             var languageId = HttpContext.Session.GetString(SystemConstants.AppSettings.DefaultLanguageID);
 
             var result = await _productApiClient.GetAll(languageId);
-
+            if (TempData["message"] != null)
+                ViewBag.message = TempData["message"] as string;
             return View(result.ResultObj);
         }
 

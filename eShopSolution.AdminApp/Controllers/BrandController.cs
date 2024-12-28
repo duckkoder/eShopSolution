@@ -20,6 +20,8 @@ namespace eShopSolution.AdminApp.Controllers
                 ModelState.AddModelError("",result.Message);
                 return View(ModelState);
             }
+            if (TempData["message"] != null)
+                ViewBag.message = TempData["message"] as string;
             return View(result.ResultObj);
         }
 
