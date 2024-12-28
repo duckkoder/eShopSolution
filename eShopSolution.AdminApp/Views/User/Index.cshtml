@@ -2,15 +2,13 @@
 
 @{
     ViewData["Title"] = "Users";
-}
-
-@section Scripts {
     <script>
         setTimeout(function () {
             $('#msgAlert').fadeOut('slow');
         }, 2000);
     </script>
 }
+
 
 <div class="container-fluid px-4">
     <h1 class="mt-4">DataTable's Users</h1>
@@ -73,7 +71,7 @@
                                 @Html.DisplayFor(modelItem => item.UserName)
                             </td>
                             <td translate="no">
-                                <i class="no-translate"> @Html.DisplayFor(modelItem => item.FirstName)</i>
+                                @Html.DisplayFor(modelItem => item.FirstName)
                             </td>
                             <td translate="no">
                                 @Html.DisplayFor(modelItem => item.LastName)

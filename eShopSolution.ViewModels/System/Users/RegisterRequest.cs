@@ -22,5 +22,7 @@ namespace eShopSolution.ViewModels.System.Users
 		public string PhoneNumber { get; set; }
 
 		public string PasswordConfirmed { get; set;}
+
+		public bool IsEmailConfirmed { get; set; } = false;
 	}
 }

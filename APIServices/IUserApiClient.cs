@@ -6,6 +6,7 @@ namespace APIServices
     public interface IUserApiClient
     {
         public Task<ApiResult<string>> Authenticate(LoginRequest request);
+        public Task<ApiResult<string>> AuthenticateWithGoogle(LoginWithGoogleRequest request);
 
         public Task<ApiResult<PagedResult<UserViewModel>>> GetUserPaging(GetUserPagingRequest request);
 
