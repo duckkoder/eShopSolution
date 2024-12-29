@@ -15,6 +15,8 @@ namespace eShopSolution.Data.Entities
 
 		public DateTime Dob {  get; set; }
 
+		public string? Avatar { get; set; }
+
 		public List<Cart> Carts { get; set; }
 
 		public List<Order> Orders { get; set; }

@@ -21,6 +21,8 @@ namespace eShopSolution.Data.Configurations
 
 			builder.Property(x => x.LastName).IsRequired().HasMaxLength(200);
 
+			builder.Property(x => x.Avatar).HasMaxLength(500);
+
 			builder.Property(x => x.Dob).IsRequired();
 		}
 	}
