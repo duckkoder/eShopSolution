@@ -45,6 +45,7 @@ namespace eShopSolution.Application.System.Users
             var roles = await _userManager.GetRolesAsync(user);
             var claims = new[]
             {
+                new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
                 new Claim(ClaimTypes.Email,user.Email),
                 new Claim(ClaimTypes.GivenName,user.FirstName),
                 new Claim(ClaimTypes.Role, string.Join(";",roles)),
@@ -72,6 +73,7 @@ namespace eShopSolution.Application.System.Users
             var roles = await _userManager.GetRolesAsync(user);
             var claims = new[]
             {
+                new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
                 new Claim(ClaimTypes.Email,user.Email),
                 new Claim(ClaimTypes.GivenName,user.FirstName),
                 new Claim(ClaimTypes.Role, string.Join(";",roles)),
@@ -188,7 +190,8 @@ namespace eShopSolution.Application.System.Users
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 UserName = request.UserName,
-                PhoneNumber = request.PhoneNumber
+                PhoneNumber = request.PhoneNumber,
+                EmailConfirmed = request.IsEmailConfirmed
             };
             var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)

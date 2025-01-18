@@ -1,4 +1,6 @@
-﻿namespace eShopSolution.WebApp.wwwroot.css
+﻿
+
+/*//ProductImage*/
 .product-image {
     width: 250px;
     height: 300px;
@@ -36,3 +38,120 @@
     border: 1px solid red;
     border-radius: 5px;
 }
+
+
+
+/*//Product Size*/
+/* Kiểu chung cho các tùy chọn kích thước */
+.size-option {
+    color: black;
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid black;
+    margin: 5px;
+    display: inline-block;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+    /* Hiệu ứng hover cho các tùy chọn khả dụng */
+    .size-option.available:hover {
+        color: green;
+        border-color: green;
+    }
+
+    /* Tùy chọn khả dụng */
+    .size-option.available {
+        cursor: pointer;
+    }
+
+    /* Tùy chọn không khả dụng */
+    .size-option.unavailable {
+        color: red;
+        text-decoration: line-through;
+        border: 1px solid red;
+        cursor: not-allowed;
+    }
+
+    /* Tùy chọn được chọn */
+    .size-option.selected {
+        color: green;
+        border-color: green;
+    }
+
+    /*predict size*/
+
+<style >
+#predictPartial {
+    margin: 20px auto;
+    max-width: 400px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.input-custom {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+    .input-custom:focus {
+        border-color: #007bff;
+        outline: none;
+        box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5);
+    }
+
+.gender-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+    .gender-group h4 {
+        margin: 0;
+        font-size: 18px;
+    }
+
+.gender-label {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    gap: 5px;
+    cursor: pointer;
+}
+
+#calculateButton {
+    width: 100%;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+    #calculateButton:hover {
+        background-color: #0056b3;
+    }
+
+#result_predict {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #333;
+    text-align: center;
+}
+
+</style >

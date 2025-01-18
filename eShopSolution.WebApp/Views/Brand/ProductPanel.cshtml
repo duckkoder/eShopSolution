@@ -1,0 +1,32 @@
+﻿@model eShopSolution.ViewModels.Catalog.Products.ProductViewModel
+
+@{
+    var product = Model;
+}
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+
+
+<form class="add-to-cart-form" id="add-to-cart-form-@product.Id">
+    <input type="hidden" name="ProductId" value="@product.Id" />
+    <input type="hidden" name="CreateAt" value="@DateTime.Now" />
+
+</form>
+
+<li>
+    <figure>
+        <a asp-action="Detail" asp-controller="Product" asp-route-id="@product.Id" class="aa-product-img"><img src="@(Configuration["BaseAddress"]+ "user-content/"+@product.ImageThumbnails)" alt="product.SeoAlias" style="width:250px; height:300px"></a>
+        <a class="aa-add-card-btn" id="add-to-cart-btn"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
+        <figcaption>
+            <a asp-action="Detail" asp-controller="Product" asp-route-id="@product.Id">@product.Name</a>
+            <span class="aa-product-price">@product.Price VND</span>
+            <p class="aa-product-descrip">@product.SeoDescription</p>
+        </figcaption>
+    </figure>
+    <div class="aa-product-hvr-content">
+        <a href="#" data-toggle="tooltip" data-placement="top" title="Add to Wishlist"><span class="fa fa-heart-o"></span></a>
+        <a href="#" data-toggle="tooltip" data-placement="top" title="Compare"><span class="fa fa-exchange"></span></a>
+        <a href="#" data-toggle2="tooltip" class="quick-view-btn" data-id="@product.Id" data-placement="top" title="Quick View" data-toggle="modal" data-target="#quick-view-modal"><span class="fa fa-search"></span></a>
+    </div>
+    <!-- product badge -->
+    <span class="aa-badge aa-hot" href="#">HOT!</span>
+</li>

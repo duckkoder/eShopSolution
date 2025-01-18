@@ -4,18 +4,33 @@
 <div id="predictPartial">
     <h4>Input Your Height And Weight</h4>
     <form id="predictForm">
+        <!-- Nhập Height -->
         <input asp-for="Brand" type="hidden" />
         <input asp-for="Type" type="hidden" />
-        <input asp-for="Gender" type="hidden" />
-        <input asp-for="Height" type="text" placeholder="Your Height(Cm)" class="form-control" />
-        <input asp-for="Weight" type="text" placeholder="Your Weight(Kg)" class="form-control" />
+        <div class="form-group">
+            <input asp-for="Height" type="text" placeholder="Your Height (Cm)" class="form-control input-custom" />
+        </div>
+        <!-- Nhập Weight -->
+        <div class="form-group">
+            <input asp-for="Weight" type="text" placeholder="Your Weight (Kg)" class="form-control input-custom" />
+        </div>
+
+        <!-- Chọn Gender -->
+        <div class="form-group gender-group">
+            <h4>Gender:</h4>
+            <div>
+                <label for="male" class="gender-label">
+                    <input asp-for="Gender" type="radio" id="male" value="1" /> Male
+                </label>
+                <label for="female" class="gender-label">
+                    <input asp-for="Gender" type="radio" id="female" value="0" /> Female
+                </label>
+            </div>
+        </div>
+
+        <!-- Nút tính toán -->
         <button type="button" id="calculateButton" class="btn btn-primary">Calculate</button>
     </form>
 
-    <div id="result">
-        @if (ViewBag.Result != null)
-        {
-            <p>Recommended Size: @ViewBag.Result</p>
-        }
-    </div>
+    <h5 id="result_predict"></h5>
 </div>

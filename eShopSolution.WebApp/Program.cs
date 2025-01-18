@@ -40,6 +40,8 @@ namespace eShopSolution.WebApp
             builder.Services.AddTransient<IProductApiClient, ProductApiClient>();
             builder.Services.AddTransient<IBrandApiClient, BrandApiClient>();
             builder.Services.AddTransient<ICategoryApiClient, CategoryApiClient>();
+            builder.Services.AddTransient<ICartApiClient, CartApiClient>();
+
 
             builder.Services.AddControllersWithViews()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
