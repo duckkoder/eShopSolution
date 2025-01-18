@@ -4,41 +4,72 @@
 }
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @section extend {
-
+    <link href="~/css/extendsstyle.css" rel="stylesheet" />
     <script>
         function selectSize(element) {
-           
             const allSizes = document.querySelectorAll('.aa-prod-view-size a');
             allSizes.forEach(size => {
                 size.classList.remove('selected');
-                size.style.backgroundColor = 'transparent'; 
+                size.style.backgroundColor = 'transparent';
                 size.style.color = 'black';
                 size.style.borderColor = 'black';
             });
 
-          
+            // Highlight size được chọn
             element.classList.add('selected');
             element.style.backgroundColor = 'lightblue';
             element.style.color = 'green';
             element.style.borderColor = 'green';
+
+            // Gán giá trị size vào input ẩn
+            document.querySelector("input[name='ProductSize.Name']").value = element.innerText.trim();
+
         }
+
     </script>
     <script>
         $(document).ready(function () {
             // Gắn sự kiện bằng document để xử lý động
             $(document).on('click', '#calculateButton', function () {
-                var formData = $('#predictForm').serialize(); 
+                var formData = $('#predictForm').serialize();
 
                 $.ajax({
-                    url: '/Product/CalculatePrediction', 
+                    url: '/Product/CalculatePrediction',
                     type: 'POST',
                     data: formData,
+                    success: function (response) {
+                        // Hiển thị kết quả trả về trong div #result_predict
+                        $('#result_predict').html(response);
+                    },
                     error: function () {
                         alert('Error while processing request.');
                     }
                 });
             });
         });
+    </script>
+
+
+    <script>
+        function addToCart(productId) {
+            const form = document.querySelector(`#add-to-cart-form-${productId}`);
+            const formData = new FormData(form);
+
+            $.ajax({
+                url: '/Cart/AddToCart',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    alert("Product added to cart successfully!");
+                },
+                error: function () {
+                    alert("Failed to add product to cart.");
+                }
+            });
+        }
+
     </script>
 
 }
@@ -114,28 +145,31 @@
                                         }
                                     </div>
                                     <p>@Model.product.Description</p>
-                                    <h4>Size</h4>
+
                                     <div class="aa-prod-view-size">
                                         @foreach (var size in Model.ProductSizes)
                                         {
                                             if (size.Quantity > 0)
                                             {
-                                                <a style="color: black; text-decoration: none; padding: 5px 10px; border: 1px solid black; margin: 5px; display: inline-block; cursor: pointer; transition: all 0.3s;"
-                                                   onclick="selectSize(this)"
-                                                   onmouseover="this.style.color='green'; this.style.borderColor='green';"
-                                                   onmouseout="if (!this.classList.contains('selected')) { this.style.color='black'; this.style.borderColor='black'; }">
+                                                <a class="size-option available"
+                                                   onclick="selectSize(this)">
                                                     @size.Name
                                                 </a>
                                             }
                                             else
                                             {
-                                                <a style="color: red; text-decoration: line-through; padding: 5px 10px; border: 1px solid red; margin: 5px; display: inline-block; cursor: not-allowed;"
-                                                   onclick="return false;">
+                                                <a class="size-option unavailable"
+                                                   style="pointer-events: none; opacity: 0.5;">
                                                     @size.Name
                                                 </a>
                                             }
                                         }
                                     </div>
+
+                                    <!-- Input ẩn để lưu size được chọn -->
+                                    <input type="hidden" name="Size" value="" />
+
+
                                     <input type="hidden" name="predictRequest.Brand" value="@Model.product.BrandName" />
                                     <input type="hidden" name="predictRequest.Type" value="@Model.product.Categories[0]" />
                                     <input type="hidden" name="predictRequest.Gender" value="Male" />
@@ -144,37 +178,39 @@
                                         var request = new eShopSolution.ViewModels.Catalog.Products.ProductSizePredictRequest()
             {
                 Brand = Model.product.BrandName,
-                Gender = 1,
                 Type = Model.product.Categories[0]
             };
                                     }
                                     <div id="partialContainer">
-                                        @Html.Partial("_PredictPartial", request)
+                                        @Html.Partial("_PredictPartial",request)
                                     </div>
-                                    <div class="aa-prod-quantity">
-                                        <form action="">
-                                            <select id="" name="">
-                                                <option selected="1" value="0">1</option>
-                                                <option value="1">2</option>
-                                                <option value="2">3</option>
-                                                <option value="3">4</option>
-                                                <option value="4">5</option>
-                                                <option value="5">6</option>
-                                            </select>
-                                        </form>
-                                        @{
-                                            var categories = "";
-                                            foreach (var c in Model.product.Categories)
-                                            {
-                                                categories += c + " ";
-                                            }
-                                        }
-                                        <p class="aa-prod-category">
-                                            Category: <a href="#">@categories</a>
-                                        </p>
-                                    </div>
+
+
+                                    <form id="add-to-cart-form-@Model.product.Id" class="add-to-cart-form">
+                                        <!-- ID sản phẩm -->
+                                        <input type="hidden" name="Id" value="" />
+                                        <input type="hidden" name="ProductId" value="@Model.product.Id" />
+                                        <input type="hidden" name="CreatedAt" value="@DateTime.Now" />
+                                        <input type="hidden" name="Price" value="@Model.product.Price" />
+                                        <input type="hidden" name="ProductSize.Name" value="" />
+                                    
+                                        <div class="aa-prod-quantity">
+                                            <label for="quantity">Quantity:</label>
+                                            <input id="quantity" name="ProductSize.Quantity" type="number" min="1"
+                                                   max="@Model.product.Stock" value="1" />
+
+                                            <p class="aa-prod-category">
+                                                Category:
+                                                @foreach (var c in Model.product.Categories)
+                                                {
+                                                    <a href="#">@c</a>
+                                                }
+                                            </p>
+                                        </div>
+
+                                    </form>
                                     <div class="aa-prod-view-bottom">
-                                        <a class="aa-add-to-cart-btn" href="#">Add To Cart</a>
+                                        <button class="aa-add-to-cart-btn" onclick="addToCart('@Model.product.Id')">Add To Cart</button>
                                         <a class="aa-add-to-cart-btn" href="#">Wishlist</a>
                                         <a class="aa-add-to-cart-btn" href="#">Compare</a>
                                     </div>

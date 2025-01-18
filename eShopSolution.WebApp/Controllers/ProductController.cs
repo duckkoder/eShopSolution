@@ -40,9 +40,9 @@ namespace eShopSolution.WebApp.Controllers
 
             var result = await _productApiClient.ProductSizePredict(request);
 
-            ViewBag.Result = result.ResultObj;
-
-            return PartialView("_PredictPartial", request);
+            string mess = $"Recommended Size: {result.ResultObj}";
+           
+            return Content(mess);
         }
 
         [HttpGet]

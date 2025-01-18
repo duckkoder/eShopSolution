@@ -1,0 +1,130 @@
+﻿@model eShopSolution.ViewModels.Catalog.Carts.CartViewModel
+@{
+    ViewData["title"] = "Carts";
+}
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+
+@{
+    decimal total = 0;
+        <script> 
+             $(document).ready(function () {
+                
+                $(document).on('click', '#update-cart-btn', function () {
+                    var formData = $('#update-cart-form').serialize(); 
+
+                    $.ajax({
+                        url: '/Cart/UpdateCart', 
+                        type: 'POST',
+                        data: formData,
+                        success: function () {
+                            alert("Failed to load product details.");
+
+                        }
+                        ,
+                        error: function () {
+                            alert('Error while processing request.');
+                        }
+                    });
+                });
+            });
+        </script>
+}
+
+<!-- catg header banner section -->
+<section id="aa-catg-head-banner">
+    <img src="img/fashion/fashion-header-bg-8.jpg" alt="fashion img">
+    <div class="aa-catg-head-banner-area">
+        <div class="container">
+            <div class="aa-catg-head-banner-content">
+                <h2>Cart Page</h2>
+                <ol class="breadcrumb">
+                    <li><a href="index.html">Home</a></li>
+                    <li class="active">Cart</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- / catg header banner section -->
+<!-- Cart view section -->
+<section id="cart-view">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="cart-view-area">
+                    <div class="cart-view-table">
+                        <form id="update-cart-form">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>X</th>
+                                            <th>X</th>
+                                            <th>Product</th>
+                                            <th>Size</th>
+                                            <th>Price</th>
+                                            <th>Quantity</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                            
+                                             
+                                                @foreach (var cart in Model.Items)
+                                                { 
+                                                    total += (cart.Product.Price * cart.Size.Quantity);
+                                                    <tr>
+                                                        <td><a class="remove" href="#"><fa class="fa fa-close"></fa></a></td>
+                                                        <td><a href="#"><img src="@(Configuration["BaseAddress"]+ "user-content/"+cart.Product.ImageThumbnails)" alt="img-@cart.Product.SeoTitle"></a></td>
+                                                        <td><a class="aa-cart-title" href="#">@cart.Product.Name</a></td>
+                                                        <td><a class="aa-cart-notify" href="#">@cart.Size.Name</a></td
+                                                        <td><a class="aa-cartbox-total-price" href="#">@cart.Product.Price VND</a></td 
+                                                        <td><input class="aa-cart-quantity" type="number" value="@cart.Size.Quantity"></td>
+                                               
+                                                        <td><a class="aa-cartbox-total-price" href="#">@(cart.Product.Price * cart.Size.Quantity) VND</a></td>
+                                                    </tr>
+                                                }
+                                           
+                                        
+                                            
+                                       
+                                       
+                                        <tr>
+                                            <td colspan="6" class="aa-cart-view-bottom">
+                                                <div class="aa-cart-coupon">
+                                                    <input class="aa-coupon-code" type="text" placeholder="Coupon">
+                                                    <input class="aa-cart-view-btn" type="submit" value="Apply Coupon">
+                                                </div>
+                                                <input class="aa-cart-view-btn" id="update-cart-btn" type="submit" value="Update Cart">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        
+                            <!-- Cart Total view -->
+                            <div class="cart-view-total">
+                                <h4>Cart Totals</h4>
+                                <table class="aa-totals-table">
+                                    <tbody>
+                                        <tr>
+                                            <th>Subtotal</th>
+                                            <td>@total VND</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Total</th>
+                                            <td>@total VND</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <a href="#" class="aa-cart-view-btn">Proced to Checkout</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- / Cart view section -->

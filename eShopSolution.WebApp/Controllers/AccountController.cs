@@ -29,6 +29,7 @@ namespace eShopSolution.WebApp.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+            ViewBag.message = TempData["message"] ?? string.Empty;
             return View();
         }
 

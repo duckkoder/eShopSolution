@@ -28,7 +28,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.Hosts", "3.Hosts", "{DA91
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eShopSolution.AdminApp", "eShopSolution.AdminApp\eShopSolution.AdminApp.csproj", "{86E2C54A-5B71-4772-A8E3-7E998D1B1F37}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIServices", "APIServices\APIServices.csproj", "{5830FE9B-AA65-4256-9170-47B98C0BC01C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIServices", "APIServices\APIServices.csproj", "{5830FE9B-AA65-4256-9170-47B98C0BC01C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
